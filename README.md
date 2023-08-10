@@ -339,7 +339,7 @@ Currently Vercel Pro Plan is required to be able to Deploy this application with
 
 ### Render
 
-[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/calcom/docker)
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/adanzweig/agendas-docker)
 
 <!-- ROADMAP -->
 
