@@ -270,9 +270,9 @@ const BookingPage = ({
   // });
   const mutation = useMutation(createBooking, {
     onSuccess: async (responseData) => {
-      const { uid, mercadopagoLink } = responseData;
+      // const uid = responseData?.uid;
 
-      document.location = mercadopagoLink;
+      document.location = responseData.mercadopagoLink;
       return true;
       if ("paymentUid" in responseData && !!responseData.paymentUid) {
         if (true) {

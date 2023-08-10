@@ -3744,7 +3744,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@calcom/atoms@workspace:packages/atoms":
+"@calcom/atoms@workspace:^, @calcom/atoms@workspace:packages/atoms":
   version: 0.0.0-use.local
   resolution: "@calcom/atoms@workspace:packages/atoms"
   dependencies:
@@ -3790,7 +3790,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@calcom/config@*, @calcom/config@workspace:packages/config":
+"@calcom/config@*, @calcom/config@workspace:^, @calcom/config@workspace:packages/config":
   version: 0.0.0-use.local
   resolution: "@calcom/config@workspace:packages/config"
   dependencies:
@@ -4277,7 +4277,7 @@ __metadata:
   resolution: "@calcom/prisma@workspace:packages/prisma"
   dependencies:
     "@calcom/lib": "*"
-    "@prisma/client": ^4.16.0
+    "@prisma/client": 4.16.0
     "@prisma/generator-helper": ^4.13.0
     npm-run-all: ^4.1.5
     prisma: ^4.16.0
@@ -7440,7 +7440,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@prisma/client@npm:^4.16.0":
+"@prisma/client@npm:4.16.0":
   version: 4.16.0
   resolution: "@prisma/client@npm:4.16.0"
   dependencies:
@@ -7451,6 +7451,20 @@ __metadata:
     prisma:
       optional: true
   checksum: 67fbf8e0bd672d597433b61b65a39c58cbb2eb82e7bcac33f31215d8ca5ba48df790a20aa990c47d6dde53e0d84d1a45d07d872f772d3dd8271613abe879b5d0
+  languageName: node
+  linkType: hard
+
+"@prisma/client@npm:^5.1.1":
+  version: 5.1.1
+  resolution: "@prisma/client@npm:5.1.1"
+  dependencies:
+    "@prisma/engines-version": 5.1.1-1.6a3747c37ff169c90047725a05a6ef02e32ac97e
+  peerDependencies:
+    prisma: "*"
+  peerDependenciesMeta:
+    prisma:
+      optional: true
+  checksum: 0236462afc722eb6a8dc0cc53843e5f0092cfe41a5dd5e794e41ba34be4d2166ba564c21dbb3c4436111b7a40ba4f66fc1e8328d7f17cdbfb3ac616b7efd4232
   languageName: node
   linkType: hard
 
@@ -7480,6 +7494,13 @@ __metadata:
   version: 4.16.0-66.b20ead4d3ab9e78ac112966e242ded703f4a052c
   resolution: "@prisma/engines-version@npm:4.16.0-66.b20ead4d3ab9e78ac112966e242ded703f4a052c"
   checksum: 23183cab33f95e0711cd6cee7642f4beeeb77b8b0aa54b419f55097bfb96863a11a28f6509ab27fef0ea794522e188044ce850993a25c341333f8305711a255f
+  languageName: node
+  linkType: hard
+
+"@prisma/engines-version@npm:5.1.1-1.6a3747c37ff169c90047725a05a6ef02e32ac97e":
+  version: 5.1.1-1.6a3747c37ff169c90047725a05a6ef02e32ac97e
+  resolution: "@prisma/engines-version@npm:5.1.1-1.6a3747c37ff169c90047725a05a6ef02e32ac97e"
+  checksum: cfea78fe98cff694eea31335c4167f375cdd8a848d6699bd0035d4a9c05184bf6fe57959249220c098c6214a424c9519f7cd17c51119234866840bd1030c87e1
   languageName: node
   linkType: hard
 
@@ -11823,6 +11844,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/lodash.memoize@npm:^4.1.7":
+  version: 4.1.7
+  resolution: "@types/lodash.memoize@npm:4.1.7"
+  dependencies:
+    "@types/lodash": "*"
+  checksum: 85f128b6606ab0545c11194208cf844536f981859221dff0032b1043dd4e02ee5aa1b96020d1e02a24db31be7493f2e9ff45836d2e3c35cf973fc6488f129eed
+  languageName: node
+  linkType: hard
+
+"@types/lodash@npm:*":
+  version: 4.14.197
+  resolution: "@types/lodash@npm:4.14.197"
+  checksum: 53d7567d1704de76cf33266c78062e0fd722d4b846e5b1417d0b6ef0ee41c0d9c451b92bc34f73d5f1fcc45c7d36511e92f6f47a9279b48157ba60a92ddaa078
+  languageName: node
+  linkType: hard
+
 "@types/lodash@npm:^4.14.167, @types/lodash@npm:^4.14.182":
   version: 4.14.182
   resolution: "@types/lodash@npm:4.14.182"
@@ -12991,6 +13028,13 @@ __metadata:
   version: 1.0.3
   resolution: "@wojtekmaj/date-utils@npm:1.0.3"
   checksum: 70b7152160529295319ead97e070f85a50c0eab7973b5845e3a58eab9b0c999023975d2739b5e2a059d27b108ce7cdbf14da99737d6fa3e3822d4dafb76b06f0
+  languageName: node
+  linkType: hard
+
+"@wojtekmaj/date-utils@npm:^1.1.3":
+  version: 1.5.0
+  resolution: "@wojtekmaj/date-utils@npm:1.5.0"
+  checksum: ad0fbb7345d879f99b7db549af5c9c05407d5eb87ab92f8a5a76b790f3f53f35476d40aa828b7343e3af91b566b34a5aa1fed396accad783e4b52dd9a5a8ba43
   languageName: node
   linkType: hard
 
@@ -15196,9 +15240,12 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "calcom-monorepo@workspace:."
   dependencies:
+    "@calcom/atoms": "workspace:^"
+    "@calcom/config": "workspace:^"
     "@changesets/cli": ^2.26.1
     "@deploysentinel/playwright": ^0.3.3
     "@playwright/test": ^1.31.2
+    "@prisma/client": ^5.1.1
     "@snaplet/copycat": ^0.3.0
     "@types/dompurify": ^2.4.0
     c8: ^7.13.0
@@ -15209,8 +15256,9 @@ __metadata:
     jest-diff: ^29.5.0
     jsdom: ^22.0.0
     lint-staged: ^12.5.0
-    lucide-react: ^0.171.0
+    lucide-react: ^0.265.0
     prettier: ^2.8.6
+    react-calendar: ^4.6.0
     tsc-absolute: ^1.0.0
     turbo: ^1.10.1
     typescript: ^4.9.4
@@ -15900,6 +15948,13 @@ __metadata:
   version: 1.1.1
   resolution: "clsx@npm:1.1.1"
   checksum: ff052650329773b9b245177305fc4c4dc3129f7b2be84af4f58dc5defa99538c61d4207be7419405a5f8f3d92007c954f4daba5a7b74e563d5de71c28c830063
+  languageName: node
+  linkType: hard
+
+"clsx@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "clsx@npm:2.0.0"
+  checksum: a2cfb2351b254611acf92faa0daf15220f4cd648bdf96ce369d729813b85336993871a4bf6978ddea2b81b5a130478339c20d9d0b5c6fc287e5147f0c059276e
   languageName: node
   linkType: hard
 
@@ -20408,6 +20463,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"get-user-locale@npm:^2.2.1":
+  version: 2.3.0
+  resolution: "get-user-locale@npm:2.3.0"
+  dependencies:
+    "@types/lodash.memoize": ^4.1.7
+    lodash.memoize: ^4.1.1
+  checksum: 8a815e7528d1a75d85b25573ecd66890b126cdc6759f06354dd0b59371d88618aad5a4955ccab5c1267a9ca6a6e46b9362e9bad2639ad5949d3e90542a480791
+  languageName: node
+  linkType: hard
+
 "get-value@npm:^2.0.3, get-value@npm:^2.0.6":
   version: 2.0.6
   resolution: "get-value@npm:2.0.6"
@@ -24091,7 +24156,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash.memoize@npm:^4.1.2":
+"lodash.memoize@npm:^4.1.1, lodash.memoize@npm:^4.1.2":
   version: 4.1.2
   resolution: "lodash.memoize@npm:4.1.2"
   checksum: 9ff3942feeccffa4f1fafa88d32f0d24fdc62fd15ded5a74a5f950ff5f0c6f61916157246744c620173dddf38d37095a92327d5fd3861e2063e736a5c207d089
@@ -24384,6 +24449,15 @@ __metadata:
   peerDependencies:
     react: ^16.5.1 || ^17.0.0 || ^18.0.0
   checksum: 768ffe368c52a518ee339203d86ff4479989ab4d79c0716f721900c4bb7392ef6ff7a14807f6a685abd74d27f4c1778170bff77a0ab4c3e06c17944b557d8300
+  languageName: node
+  linkType: hard
+
+"lucide-react@npm:^0.265.0":
+  version: 0.265.0
+  resolution: "lucide-react@npm:0.265.0"
+  peerDependencies:
+    react: ^16.5.1 || ^17.0.0 || ^18.0.0
+  checksum: c5c7838f4cb54b91678ab248403df279e0aba53938e383c65d7df594e517d9f9a4714c90568efa535ba58ec341e2cf1238de55a99668b1a342d1e44ae6f16d85
   languageName: node
   linkType: hard
 
@@ -28646,6 +28720,26 @@ __metadata:
     react: ^16.3.0 || ^17.0.0 || ^18.0.0
     react-dom: ^16.3.0 || ^17.0.0 || ^18.0.0
   checksum: 368084515bdbc59dddf1a0e367c6bb49e9b9efdc1d01343afeeb412feb52d89b88ac6b09378433cdb3716557ff2cf56751f11183ecd99a5df2a5c48b1691e33d
+  languageName: node
+  linkType: hard
+
+"react-calendar@npm:^4.6.0":
+  version: 4.6.0
+  resolution: "react-calendar@npm:4.6.0"
+  dependencies:
+    "@wojtekmaj/date-utils": ^1.1.3
+    clsx: ^2.0.0
+    get-user-locale: ^2.2.1
+    prop-types: ^15.6.0
+    tiny-warning: ^1.0.0
+  peerDependencies:
+    "@types/react": ^16.8.0 || ^17.0.0 || ^18.0.0
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0
+    react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
+  peerDependenciesMeta:
+    "@types/react":
+      optional: true
+  checksum: 2832d2a468a8f3a533e9f59a969774c6d608e9a2c60afa9fa599b3bbbbd23d5bc9fa1ca6dca4ac8809a4524bdb6095d8c743977a6d6a132e43f9cbbd460d1c62
   languageName: node
   linkType: hard
 
