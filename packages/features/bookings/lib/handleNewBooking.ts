@@ -5,6 +5,7 @@ import { isValidPhoneNumber } from "libphonenumber-js";
 import { cloneDeep } from "lodash";
 import type { NextApiRequest } from "next";
 import short, { uuid } from "short-uuid";
+import request from "sync-request";
 import { v5 as uuidv5 } from "uuid";
 import z from "zod";
 
@@ -46,6 +47,7 @@ import getWebhooks from "@calcom/features/webhooks/lib/getWebhooks";
 import { isPrismaObjOrUndefined, parseRecurringEvent } from "@calcom/lib";
 import { getVideoCallUrlFromCalEvent } from "@calcom/lib/CalEventParser";
 import { checkRateLimitAndThrowError } from "@calcom/lib/checkRateLimitAndThrowError";
+import { WEBSITE_URL } from "@calcom/lib/constants";
 import { getDefaultEvent, getGroupName, getUsernameList } from "@calcom/lib/defaultEvents";
 import { getErrorFromUnknown } from "@calcom/lib/errors";
 import getIP from "@calcom/lib/getIP";
@@ -223,6 +225,7 @@ function checkForConflicts(busyTimes: BufferedBusyTimes, time: dayjs.ConfigType,
 }
 
 const getEventTypesFromDB = async (eventTypeId: number) => {
+  
   const eventType = await prisma.eventType.findUniqueOrThrow({
     where: {
       id: eventTypeId,
@@ -359,7 +362,7 @@ async function ensureAvailableUsers(
       continue;
     }
 
-    console.log("calendarBusyTimes==>>>", bufferedBusyTimes);
+    
 
     let foundConflict = false;
     try {
@@ -652,7 +655,7 @@ async function handler(
   const isTeamEventType =
     eventType.schedulingType === SchedulingType.COLLECTIVE ||
     eventType.schedulingType === SchedulingType.ROUND_ROBIN;
-
+  
   const paymentAppData = getPaymentAppData(eventType);
 
   let timeOutOfBounds = false;
@@ -674,7 +677,6 @@ async function handler(
       throw new HttpError({ statusCode: 400, message: error.message });
     }
   }
-
   if (timeOutOfBounds) {
     const error = {
       errorCode: "BookingTimeOutOfBounds",
@@ -725,6 +727,7 @@ async function handler(
       statusCode: 400,
     });
   }
+  
 
   // If this event was pre-relationship migration
   // TODO: Establish whether this is dead code.
@@ -784,7 +787,6 @@ async function handler(
       await checkDurationLimits(eventType.durationLimits as IntervalLimit, startAsDate, eventType.id);
     }
   }
-
   if (!eventType.seatsPerTimeSlot) {
     const availableUsers = await ensureAvailableUsers(
       {
@@ -833,6 +835,7 @@ async function handler(
     // Pushing fixed user before the luckyUser guarantees the (first) fixed user as the organizer.
     users = [...availableUsers.filter((user) => user.isFixed), ...luckyUsers];
   }
+  
 
   const [organizerUser] = users;
   const tOrganizer = await getTranslation(organizerUser?.locale ?? "en", "common");
@@ -882,7 +885,7 @@ async function handler(
   const bookingLocation = organizerOrFirstDynamicGroupMemberDefaultLocationUrl
     ? organizerOrFirstDynamicGroupMemberDefaultLocationUrl
     : getLocationValueForDB(locationBodyString, eventType.locations);
-
+  
   const customInputs = getCustomInputsResponses(reqBody, eventType.customInputs);
   const teamMemberPromises =
     users.length > 1
@@ -963,6 +966,7 @@ async function handler(
   let bookingSeat: Prisma.BookingSeatGetPayload<{ include: { booking: true; attendee: true } }> | null = null;
   type BookingType = Prisma.PromiseReturnType<typeof getOriginalRescheduledBooking>;
   let originalRescheduledBooking: BookingType = null;
+  
 
   if (rescheduleUid) {
     // rescheduleUid can be bookingUid and bookingSeatUid
@@ -986,7 +990,7 @@ async function handler(
       throw new HttpError({ statusCode: 404, message: "Could not find original booking" });
     }
   }
-
+  
   /* Used for seats bookings to update evt object with video data */
   const addVideoCallDataToEvt = (bookingReferences: BookingReference[]) => {
     const videoCallReference = bookingReferences.find((reference) => reference.type.includes("_video"));
@@ -1003,6 +1007,7 @@ async function handler(
 
   /* Check if the original booking has no more attendees, if so delete the booking
   and any calendar or video integrations */
+  
   const lastAttendeeDeleteBooking = async (
     originalRescheduledBooking: Awaited<ReturnType<typeof getOriginalRescheduledBooking>>,
     filteredAttendees: Partial<Attendee>[],
@@ -1050,7 +1055,7 @@ async function handler(
     }
     return deletedReferences;
   };
-
+  
   const handleSeats = async () => {
     let resultBooking:
       | (Partial<Booking> & {
@@ -1095,7 +1100,7 @@ async function handler(
     ) {
       throw new HttpError({ statusCode: 409, message: "Already signed up for this booking." });
     }
-
+    
     // There are two paths here, reschedule a booking with seats and booking seats without reschedule
     if (rescheduleUid) {
       // See if the new date has a booking already
@@ -1114,7 +1119,6 @@ async function handler(
           },
         },
       });
-
       const credentials = await refreshCredentials(organizerUser.credentials);
       const eventManager = new EventManager({ ...organizerUser, credentials });
 
@@ -1122,7 +1126,6 @@ async function handler(
         // typescript isn't smart enough;
         throw new Error("Internal Error.");
       }
-
       const updatedBookingAttendees = originalRescheduledBooking.attendees.reduce(
         (filteredAttendees, attendee) => {
           if (attendee.email === bookerEmail) {
@@ -1447,7 +1450,7 @@ async function handler(
       const results = updateManager.results;
 
       const calendarResult = results.find((result) => result.type.includes("_calendar"));
-
+      
       evt.iCalUID = Array.isArray(calendarResult?.updatedEvent)
         ? calendarResult?.updatedEvent[0]?.iCalUID
         : calendarResult?.updatedEvent?.iCalUID || undefined;
@@ -1763,8 +1766,8 @@ async function handler(
         };
       }
     }
-
     if (typeof paymentAppData.price === "number" && paymentAppData.price > 0) {
+      
       /* Validate if there is any payment app credential for this user */
       await prisma.credential.findFirstOrThrow({
         where: {
@@ -1776,7 +1779,6 @@ async function handler(
         },
       });
     }
-
     return prisma.booking.create(createBookingObj);
   }
 
@@ -2121,7 +2123,62 @@ async function handler(
     );
 
     req.statusCode = 201;
-    return { ...booking, message: "Payment required", paymentUid: payment?.uid };
+    /** GET MERCADOPAGO LINK */
+
+    const payload = {
+      items: [
+        {
+          title: eventType?.title ?? "",
+          description: eventType?.description ?? "",
+          category_id: "meeting",
+          quantity: 1,
+          currency_id: "$",
+          unit_price: payment?.amount ?? 100 / 100,
+        },
+      ],
+      auto_return: "approved",
+      back_urls: { success: WEBSITE_URL + "/api/integrations/mercadopagopayment/paymentCallback" },
+      payer: {
+        phone: {},
+        identification: {},
+        address: {},
+      },
+      payment_methods: {
+        excluded_payment_methods: [{}],
+        excluded_payment_types: [{}],
+      },
+      shipments: {
+        free_methods: [{}],
+        receiver_address: {},
+      },
+      external_reference: payment?.uid,
+      differential_pricing: {},
+      metadata: {
+        bookingId: payment?.uid,
+      },
+    };
+
+    const options = {
+      method: "POST",
+      json: payload,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + payment?.data?.access_token,
+      },
+    };
+    if (payment?.data?.access_token == undefined) {
+      return true;
+    }
+    const response = request("POST", "https://api.mercadopago.com/checkout/preferences", options); // Replace the URL with your actual API endpoint
+    // if (response.statusCode === 200) {
+    const data = JSON.parse(response.getBody("utf8"));
+    // console.log("DATA", data);
+    const mplink = data.init_point;
+    // console.log(data.sandbox_init_point);
+    // const mplink = data.sandbox_init_point;
+
+    /** --------------- */
+    return { ...booking, message: "Payment required", paymentUid: payment?.uid, mercadopagoLink: mplink };
   }
 
   log.debug(`Booking ${organizerUser.username} completed`);
@@ -2264,7 +2321,7 @@ async function handler(
   } catch (error) {
     log.error("Error while scheduling workflow reminders", error);
   }
-
+  // booking.mercadopagoLink = "123456";
   // booking successful
   req.statusCode = 201;
   return {
@@ -2349,7 +2406,6 @@ const findBookingQuery = async (bookingId: number) => {
   if (!foundBooking) {
     throw new Error("Internal Error.");
   }
-
   // Don't leak any sensitive data
   return foundBooking;
 };

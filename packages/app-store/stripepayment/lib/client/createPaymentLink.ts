@@ -10,7 +10,9 @@ export function createPaymentLink(opts: {
   date?: Maybe<string>;
   email?: Maybe<string>;
   absolute?: boolean;
+  paymentData?: Maybe<object>;
 }): string {
+  console.log("tt123");
   const { paymentUid, name, email, date, absolute = true } = opts;
   let link = "";
   if (absolute) link = WEBSITE_URL;

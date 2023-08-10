@@ -225,12 +225,14 @@ export const insightsRouter = router({
 
       const startTimeEndTimeDiff = dayjs(endDate).diff(dayjs(startDate), "day");
 
-      const baseBookingIds = baseBookings.map((b) => b.id);
-
+      const baseBookingIds = [...new Set(baseBookings.map((b) => b.id))];
+      console.log(baseBookingIds);
       const totalRescheduled = await EventsInsights.getTotalRescheduledEvents(baseBookingIds);
 
+      console.log("list", baseBookingIds);
       const totalCancelled = await EventsInsights.getTotalCancelledEvents(baseBookingIds);
-
+      const totalCompleted = await EventsInsights.getTotalCompletedEvents(baseBookingIds);
+      console.log("cancelled", totalCancelled);
       const lastPeriodStartDate = dayjs(startDate).subtract(startTimeEndTimeDiff, "day");
       const lastPeriodEndDate = dayjs(endDate).subtract(startTimeEndTimeDiff, "day");
 
@@ -248,6 +250,7 @@ export const insightsRouter = router({
       const lastPeriodTotalRescheduled = await EventsInsights.getTotalRescheduledEvents(
         lastPeriodBaseBookingIds
       );
+      const lastPeriodTotalCompleted = await EventsInsights.getTotalCompletedEvents(lastPeriodBaseBookingIds);
 
       const lastPeriodTotalCancelled = await EventsInsights.getTotalCancelledEvents(lastPeriodBaseBookingIds);
       const result = {
@@ -257,11 +260,8 @@ export const insightsRouter = router({
           deltaPrevious: EventsInsights.getPercentage(baseBookings.length, lastPeriodBaseBookings.length),
         },
         completed: {
-          count: baseBookings.length - totalCancelled - totalRescheduled,
-          deltaPrevious: EventsInsights.getPercentage(
-            baseBookings.length - totalCancelled - totalRescheduled,
-            lastPeriodBaseBookings.length - lastPeriodTotalCancelled - lastPeriodTotalRescheduled
-          ),
+          count: lastPeriodTotalCompleted,
+          deltaPrevious: EventsInsights.getPercentage(totalCompleted, lastPeriodTotalCompleted),
         },
         rescheduled: {
           count: totalRescheduled,

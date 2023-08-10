@@ -9,6 +9,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import type { EventLocationType } from "@calcom/app-store/locations";
+import { createPaymentLink as mpCreatePaymentLink } from "@calcom/app-store/mercadopagopayment/lib/client";
 import { createPaymentLink } from "@calcom/app-store/stripepayment/lib/client";
 import dayjs from "@calcom/dayjs";
 import {
@@ -188,15 +189,31 @@ export const BookEventForm = ({ onCancel }: BookEventFormProps) => {
     onSuccess: async (responseData) => {
       const { uid, paymentUid } = responseData;
       if (paymentUid) {
-        return await router.push(
-          createPaymentLink({
-            paymentUid,
-            date: timeslot,
-            name: bookingForm.getValues("responses.name"),
-            email: bookingForm.getValues("responses.email"),
-            absolute: false,
-          })
-        );
+        if (true) {
+          return await router.push(
+            mpCreatePaymentLink({
+              paymentUid,
+              date: timeslot,
+              name: bookingForm.getValues("responses.name"),
+              email: bookingForm.getValues("responses.email"),
+              absolute: false,
+              event: {},
+              paymentData: {},
+            })
+          );
+        } else {
+          return await router.push(
+            createPaymentLink({
+              paymentUid,
+              date: timeslot,
+              name: bookingForm.getValues("responses.name"),
+              email: bookingForm.getValues("responses.email"),
+              absolute: false,
+              event: {},
+              paymentData: {},
+            })
+          );
+        }
       }
 
       if (!uid) {
@@ -362,6 +379,7 @@ export const BookEventForm = ({ onCancel }: BookEventFormProps) => {
               {t("back")}
             </Button>
           )}
+          TEST
           <Button
             type="submit"
             color="primary"

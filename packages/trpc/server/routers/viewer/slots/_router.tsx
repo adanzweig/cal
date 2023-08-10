@@ -42,7 +42,6 @@ export const slotsRouter = router({
     if (!UNSTABLE_HANDLER_CACHE.reserveSlot) {
       throw new Error("Failed to load handler");
     }
-
     return UNSTABLE_HANDLER_CACHE.reserveSlot({
       ctx: { ...ctx, req: ctx.req as NextApiRequest, res: ctx.res as NextApiResponse },
       input,

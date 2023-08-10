@@ -29,6 +29,8 @@ export const createPaymentsFixture = (page: Page) => {
           },
           data: {},
           externalId: "DEMO_PAYMENT_FROM_DB_" + Date.now(),
+          apikey: "",
+          access_token: "",
           booking: {
             connect: {
               id: bookingId,

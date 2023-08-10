@@ -96,7 +96,16 @@ class EventsInsights {
       },
     });
   };
-
+  static getTotalCompletedEvents = async (bookingIds: number[]) => {
+    return await prisma.bookingTimeStatus.count({
+      where: {
+        id: {
+          in: bookingIds,
+        },
+        timeStatus: "completed",
+      },
+    });
+  };
   static getTotalCancelledEvents = async (bookingIds: number[]) => {
     return await prisma.bookingTimeStatus.count({
       where: {

@@ -27,7 +27,6 @@ export const reserveSlotHandler = async ({ ctx, input }: ReserveSlotOptions) => 
     where: { id: eventTypeId },
     select: { users: { select: { id: true } }, seatsPerTimeSlot: true },
   });
-
   if (!eventType) {
     throw new TRPCError({
       message: "Event type not found",
@@ -86,5 +85,6 @@ export const reserveSlotHandler = async ({ ctx, input }: ReserveSlotOptions) => 
     }
   }
   res?.setHeader("Set-Cookie", serialize("uid", uid, { path: "/", sameSite: "lax" }));
+
   return;
 };

@@ -327,6 +327,7 @@ export class PaymentService implements IAbstractPaymentService {
     },
     paymentData: Payment
   ): Promise<void> {
+    console.log("pasa por aqui2");
     await sendAwaitingPaymentEmail({
       ...event,
       paymentInfo: {
@@ -335,6 +336,8 @@ export class PaymentService implements IAbstractPaymentService {
           name: booking.user?.name,
           email: booking.user?.email,
           date: booking.startTime.toISOString(),
+          event: event,
+          paymentData: paymentData,
         }),
         paymentOption: paymentData.paymentOption || "ON_BOOKING",
         amount: paymentData.amount,

@@ -27,7 +27,7 @@ const BookingDescriptionPayment = (props: {
           {/* If undefined this will default to the browser locale */}
           {new Intl.NumberFormat(i18n?.language, {
             style: "currency",
-            currency: paymentAppData.currency,
+            currency: "ars",
           }).format(paymentAppData.price / 100)}
         </>
       )}

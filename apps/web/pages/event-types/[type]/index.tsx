@@ -207,11 +207,11 @@ const EventTypePage = (props: EventTypeSetupProps) => {
   });
 
   const [periodDates] = useState<{ startDate: Date; endDate: Date }>({
-    startDate: new Date(eventType.periodStartDate || Date.now()),
-    endDate: new Date(eventType.periodEndDate || Date.now()),
+    startDate: new Date(eventType?.periodStartDate || Date.now()),
+    endDate: new Date(eventType?.periodEndDate || Date.now()),
   });
 
-  const metadata = eventType.metadata;
+  const metadata = eventType?.metadata;
   // fallback to !!eventType.schedule when 'useHostSchedulesForTeamEvent' is undefined
   if (!!team && metadata !== null) {
     metadata.config = {
@@ -228,34 +228,34 @@ const EventTypePage = (props: EventTypeSetupProps) => {
 
   const bookingFields: Prisma.JsonObject = {};
 
-  eventType.bookingFields.forEach(({ name }) => {
+  eventType?.bookingFields.forEach(({ name }) => {
     bookingFields[name] = name;
   });
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const defaultValues: any = useMemo(() => {
     return {
-      title: eventType.title,
-      locations: eventType.locations || [],
-      recurringEvent: eventType.recurringEvent || null,
-      description: eventType.description ?? undefined,
-      schedule: eventType.schedule || undefined,
-      bookingLimits: eventType.bookingLimits || undefined,
-      durationLimits: eventType.durationLimits || undefined,
-      length: eventType.length,
-      hidden: eventType.hidden,
+      title: eventType?.title,
+      locations: eventType?.locations || [],
+      recurringEvent: eventType?.recurringEvent || null,
+      description: eventType?.description ?? undefined,
+      schedule: eventType?.schedule || undefined,
+      bookingLimits: eventType?.bookingLimits || undefined,
+      durationLimits: eventType?.durationLimits || undefined,
+      length: eventType?.length,
+      hidden: eventType?.hidden,
       periodDates: {
         startDate: periodDates.startDate,
         endDate: periodDates.endDate,
       },
-      bookingFields: eventType.bookingFields,
-      periodType: eventType.periodType,
-      periodCountCalendarDays: eventType.periodCountCalendarDays ? "1" : "0",
-      schedulingType: eventType.schedulingType,
-      minimumBookingNotice: eventType.minimumBookingNotice,
+      bookingFields: eventType?.bookingFields,
+      periodType: eventType?.periodType,
+      periodCountCalendarDays: eventType?.periodCountCalendarDays ? "1" : "0",
+      schedulingType: eventType?.schedulingType,
+      minimumBookingNotice: eventType?.minimumBookingNotice,
       metadata,
-      hosts: eventType.hosts,
-      children: eventType.children.map((ch) => ({
+      hosts: eventType?.hosts,
+      children: eventType?.children.map((ch) => ({
         ...ch,
         created: true,
         owner: {
@@ -315,8 +315,8 @@ const EventTypePage = (props: EventTypeSetupProps) => {
     ).length;
   }
 
-  const permalink = `${CAL_URL}/${team ? `team/${team.slug}` : eventType.users[0].username}/${
-    eventType.slug
+  const permalink = `${CAL_URL}/${team ? `team/${team.slug}` : eventType?.users[0].username}/${
+    eventType?.slug
   }`;
 
   const tabMap = {
@@ -338,7 +338,7 @@ const EventTypePage = (props: EventTypeSetupProps) => {
     workflows: (
       <EventWorkflowsTab
         eventType={eventType}
-        workflows={eventType.workflows.map((workflowOnEventType) => workflowOnEventType.workflow)}
+        workflows={eventType?.workflows.map((workflowOnEventType) => workflowOnEventType.workflow)}
       />
     ),
     webhooks: <EventWebhooksTab eventType={eventType} />,
@@ -417,14 +417,14 @@ const EventTypePage = (props: EventTypeSetupProps) => {
   };
 
   const [slugExistsChildrenDialogOpen, setSlugExistsChildrenDialogOpen] = useState<ChildrenEventType[]>([]);
-  const slug = formMethods.watch("slug") ?? eventType.slug;
+  const slug = formMethods.watch("slug") ?? eventType?.slug;
 
   return (
     <>
       <EventTypeSingleLayout
         enabledAppsNumber={numberOfActiveApps}
         installedAppsNumber={numberOfInstalledApps}
-        enabledWorkflowsNumber={eventType.workflows.length}
+        enabledWorkflowsNumber={eventType?.workflows.length}
         eventType={eventType}
         team={team}
         availability={availability}
