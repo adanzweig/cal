@@ -28,6 +28,7 @@ export const EventTypeAddonMap = {
   plausible: dynamic(() => import("./plausible/components/EventTypeAppCardInterface")),
   qr_code: dynamic(() => import("./qr_code/components/EventTypeAppCardInterface")),
   stripepayment: dynamic(() => import("./stripepayment/components/EventTypeAppCardInterface")),
+  mercadopagopayment: dynamic(() => import("./mercadopagopayment/components/EventTypeAppCardInterface")),
   "booking-pages-tag": dynamic(() =>
     import("./templates/booking-pages-tag/components/EventTypeAppCardInterface")
   ),

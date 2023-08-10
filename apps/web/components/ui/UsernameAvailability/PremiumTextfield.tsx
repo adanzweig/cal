@@ -4,7 +4,6 @@ import { useRouter } from "next/router";
 import type { RefCallback } from "react";
 import { useEffect, useMemo, useState } from "react";
 
-import { getPremiumPlanPriceValue } from "@calcom/app-store/stripepayment/lib/utils";
 import { WEBAPP_URL } from "@calcom/lib/constants";
 import { fetchUsername } from "@calcom/lib/fetchUsername";
 import hasKeyInMetadata from "@calcom/lib/hasKeyInMetadata";
@@ -172,7 +171,7 @@ const PremiumTextfield = (props: ICustomUsernameProps) => {
 
   let paymentMsg = !currentUsername ? (
     <span className="text-xs text-orange-400">
-      You need to reserve your premium username for {getPremiumPlanPriceValue()}
+      You need to reserve your premium username for {mpGetPremiumPlanPriceValue()}
     </span>
   ) : null;
 

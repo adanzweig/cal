@@ -287,7 +287,7 @@ function BookingListItem(booking: BookingItemProps) {
           setIsOpenDialog={setChargeCardDialogIsOpen}
           bookingId={booking.id}
           paymentAmount={booking.payment[0].amount}
-          paymentCurrency={booking.payment[0].currency}
+          paymentCurrency="ars"
         />
       )}
       {showRecordingsButtons && (

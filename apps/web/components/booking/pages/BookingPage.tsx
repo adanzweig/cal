@@ -11,6 +11,7 @@ import { z } from "zod";
 
 import BookingPageTagManager from "@calcom/app-store/BookingPageTagManager";
 import type { EventLocationType } from "@calcom/app-store/locations";
+import { createPaymentLink as mpPaymentLink } from "@calcom/app-store/mercadopagopayment/lib/client";
 import { createPaymentLink } from "@calcom/app-store/stripepayment/lib/client";
 import type { LocationObject } from "@calcom/core/location";
 import dayjs from "@calcom/dayjs";
@@ -221,7 +222,7 @@ const BookingPage = ({
   const { data: session } = useSession();
   const isBackgroundTransparent = useIsBackgroundTransparent();
   const telemetry = useTelemetry();
-
+  const paymentURL = "";
   const { timezone } = useTimePreferences();
 
   const reserveSlot = () => {
@@ -234,6 +235,7 @@ const BookingPage = ({
       });
     }
   };
+
   // Define duration now that we support multiple duration eventTypes
   let duration = eventType.length;
   if (
@@ -261,21 +263,42 @@ const BookingPage = ({
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
+  // const mercadopagoLink = useMutation(getMercadopagoLinkButton, {
+  //   onSuccess: async (responseData) => {
+  //     console.log("responseDATA", responseData);
+  //   },
+  // });
   const mutation = useMutation(createBooking, {
     onSuccess: async (responseData) => {
-      const { uid } = responseData;
+      const { uid, mercadopagoLink } = responseData;
 
+      document.location = mercadopagoLink;
+      return true;
       if ("paymentUid" in responseData && !!responseData.paymentUid) {
-        return await router.push(
-          createPaymentLink({
-            paymentUid: responseData.paymentUid,
-            date,
-            name: bookingForm.getValues("responses.name"),
-            email: bookingForm.getValues("responses.email"),
-            absolute: false,
-          })
-        );
+        if (true) {
+          return await router.push(
+            mpPaymentLink({
+              paymentUid: responseData.paymentUid,
+              date,
+              name: bookingForm.getValues("responses.name"),
+              email: bookingForm.getValues("responses.email"),
+              absolute: false,
+            })
+          );
+        } else {
+          console.log("pasa por aca", responseData);
+          return await router.push(
+            createPaymentLink({
+              paymentUid: responseData.paymentUid,
+              date,
+              name: bookingForm.getValues("responses.name"),
+              email: bookingForm.getValues("responses.email"),
+              event: {},
+              paymentData: {},
+              absolute: false,
+            })
+          );
+        }
       }
 
       const query = {

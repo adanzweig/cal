@@ -19,6 +19,7 @@ import { appKeysSchema as qr_code_zod_ts } from "./qr_code/zod";
 import { appKeysSchema as routing_forms_zod_ts } from "./routing-forms/zod";
 import { appKeysSchema as salesforce_zod_ts } from "./salesforce/zod";
 import { appKeysSchema as stripepayment_zod_ts } from "./stripepayment/zod";
+import { appKeysSchema as mercadopagopayment_zod_ts } from "./mercadopagopayment/zod";
 import { appKeysSchema as tandemvideo_zod_ts } from "./tandemvideo/zod";
 import { appKeysSchema as booking_pages_tag_zod_ts } from "./templates/booking-pages-tag/zod";
 import { appKeysSchema as event_type_app_card_zod_ts } from "./templates/event-type-app-card/zod";
@@ -48,6 +49,7 @@ export const appKeysSchemas = {
   "routing-forms": routing_forms_zod_ts,
   salesforce: salesforce_zod_ts,
   stripe: stripepayment_zod_ts,
+  mercadopago:mercadopagopayment_zod_ts,
   tandemvideo: tandemvideo_zod_ts,
   "booking-pages-tag": booking_pages_tag_zod_ts,
   "event-type-app-card": event_type_app_card_zod_ts,

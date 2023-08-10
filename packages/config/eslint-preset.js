@@ -25,6 +25,10 @@ module.exports = {
     "playwright/no-page-pause": "error",
     "react/jsx-curly-brace-presence": ["error", { props: "never", children: "never" }],
     "react/self-closing-comp": ["error", { component: true, html: true }],
+    "import/no-extraneous-dependencies": [
+      "error",
+      { devDependencies: false, optionalDependencies: false, peerDependencies: false },
+    ],
     "@typescript-eslint/no-unused-vars": [
       "warn",
       {

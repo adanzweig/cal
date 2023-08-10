@@ -260,6 +260,27 @@ export const updateHandler = async ({ ctx, input }: UpdateOptions) => {
     }
   }
 
+  if (input?.price || input.metadata?.apps?.mercadopagopayment?.price) {
+    data.price = input.price || input.metadata?.apps?.mercadopagopayment?.price;
+    const paymentCredential = await ctx.prisma.credential.findFirst({
+      where: {
+        userId: ctx.user.id,
+        type: {
+          contains: "_payment",
+        },
+      },
+      select: {
+        type: true,
+        key: true,
+      },
+    });
+
+    if (paymentCredential?.type === "mercadopagopayment") {
+      // const { default_currency } = mercadopagoDataSchema.parse(paymentCredential.key);
+      data.currency = "ars";
+    }
+  }
+
   const connectedLink = await ctx.prisma.hashedLink.findFirst({
     where: {
       eventTypeId: input.id,

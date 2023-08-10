@@ -1,7 +1,6 @@
 import type { PrismaClient } from "@prisma/client";
 import { Prisma } from "@prisma/client";
 
-import type { StripeData } from "@calcom/app-store/stripepayment/lib/server";
 import { getEventTypeAppData, getLocationGroupedOptions } from "@calcom/app-store/utils";
 import type { LocationObject } from "@calcom/core/location";
 import { getBookingFieldsWithSystemFields } from "@calcom/features/bookings/lib/getBookingFields";
@@ -245,6 +244,7 @@ export default async function getEventTypeById({
   const apps = newMetadata?.apps || {};
   const eventTypeWithParsedMetadata = { ...rawEventType, metadata: newMetadata };
   const stripeMetaData = getPaymentAppData(eventTypeWithParsedMetadata, true);
+  const mercadopagoMetaData = getPaymentAppData(eventTypeWithParsedMetadata, true);
   newMetadata.apps = {
     ...apps,
     stripe: {
@@ -255,6 +255,10 @@ export default async function getEventTypeById({
           credentials.find((integration) => integration.type === "stripe_payment")
             ?.key as unknown as StripeData
         )?.default_currency || "usd",
+    },
+    mercadopagopayment: {
+      ...mercadopagoMetaData,
+      currency: "usd",
     },
     giphy: getEventTypeAppData(eventTypeWithParsedMetadata, "giphy", true),
   };

@@ -39,11 +39,14 @@ const handlePayment = async (
     selectedEventType?.metadata?.apps?.[paymentAppCredentials.appId].paymentOption || "ON_BOOKING";
 
   let paymentData;
+
   if (paymentOption === "HOLD") {
     paymentData = await paymentInstance.collectCard(
       {
         amount: selectedEventType?.metadata?.apps?.[paymentAppCredentials.appId].price,
         currency: selectedEventType?.metadata?.apps?.[paymentAppCredentials.appId].currency,
+        access_token: selectedEventType?.metadata?.apps?.[paymentAppCredentials.appId].access_token ?? "",
+        apikey: selectedEventType?.metadata?.apps?.[paymentAppCredentials.appId].apikey ?? "",
       },
       booking.id,
       bookerEmail,
@@ -54,6 +57,8 @@ const handlePayment = async (
       {
         amount: selectedEventType?.metadata?.apps?.[paymentAppCredentials.appId].price,
         currency: selectedEventType?.metadata?.apps?.[paymentAppCredentials.appId].currency,
+        access_token: selectedEventType?.metadata?.apps?.[paymentAppCredentials.appId].access_token ?? "",
+        apikey: selectedEventType?.metadata?.apps?.[paymentAppCredentials.appId].apikey ?? "",
       },
       booking.id,
       bookerEmail,

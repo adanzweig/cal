@@ -236,7 +236,7 @@ const AvailabilityPage = ({ profile, eventType, ...restProps }: Props) => {
                             <>
                               {new Intl.NumberFormat(i18n.language, {
                                 style: "currency",
-                                currency: paymentAppData.currency,
+                                currency: "ars",
                               }).format(paymentAppData.price / 100)}
                             </>
                           )}

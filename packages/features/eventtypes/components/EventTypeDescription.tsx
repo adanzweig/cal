@@ -95,10 +95,7 @@ export const EventTypeDescription = ({
           {paymentAppData.enabled && (
             <li>
               <Badge variant="gray" startIcon={CreditCard}>
-                {new Intl.NumberFormat(i18n.language, {
-                  style: "currency",
-                  currency: paymentAppData.currency,
-                }).format(paymentAppData.price / 100)}
+                $ {new Intl.NumberFormat(i18n.language).format(paymentAppData.price / 100)} ARS
               </Badge>
             </li>
           )}

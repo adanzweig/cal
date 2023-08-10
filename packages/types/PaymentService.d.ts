@@ -5,20 +5,20 @@ import type { CalendarEvent } from "@calcom/types/Calendar";
 export interface IAbstractPaymentService {
   /* This method is for creating charges at the time of booking */
   create(
-    payment: Pick<Prisma.PaymentUncheckedCreateInput, "amount" | "currency">,
+    payment: Pick<Prisma.PaymentUncheckedCreateInput, "amount" | "currency" | "apikey" | "access_token">,
     bookingId: Booking["id"],
     bookerEmail: string,
     paymentOption: PaymentOption
   ): Promise<Payment>;
   /* This method is to collect card details to charge at a later date ex. no-show fees */
   collectCard(
-    payment: Pick<Prisma.PaymentUncheckedCreateInput, "amount" | "currency">,
+    payment: Pick<Prisma.PaymentUncheckedCreateInput, "amount" | "currency" | "apikey" | "access_token">,
     bookingId: Booking["id"],
     bookerEmail: string,
     paymentOption: PaymentOption
   ): Promise<Payment>;
   chargeCard(
-    payment: Pick<Prisma.PaymentUncheckedCreateInput, "amount" | "currency">,
+    payment: Pick<Prisma.PaymentUncheckedCreateInput, "amount" | "currency" | "apikey" | "access_token">,
     bookingId?: Booking["id"]
   ): Promise<Payment>;
   update(paymentId: Payment["id"], data: Partial<Prisma.PaymentUncheckedCreateInput>): Promise<Payment>;

@@ -202,6 +202,11 @@ import ensureOnlyMembersAsHosts from "./_utils/ensureOnlyMembersAsHosts";
  *                        price: 0,
  *                        enabled: false,
  *                        currency: usd
+ *                      },
+ *                      mercadopagopayment:{
+ *                        price:0,
+ *                        enabled: false,
+ *                        currency:usd
  *                      }
  *                    }
  *                  }
@@ -219,9 +224,9 @@ import ensureOnlyMembersAsHosts from "./_utils/ensureOnlyMembersAsHosts";
  */
 async function postHandler(req: NextApiRequest) {
   const { userId, isAdmin, prisma, body } = req;
-
+  console.log("PRE -----------------", body);
   const { hosts = [], ...parsedBody } = schemaEventTypeCreateBodyParams.parse(body || {});
-
+  console.log("POST---------------", parsedBody);
   let data: Prisma.EventTypeCreateArgs["data"] = {
     ...parsedBody,
     userId,

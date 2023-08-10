@@ -23,12 +23,19 @@ export const getEventTypeAppData = <T extends EventTypeAppsList>(
         }
       : null;
   }
-
   // Backward compatibility for existing event types.
   // TODO: After the new AppStore EventType App flow is stable, write a migration to migrate metadata to new format which will let us remove this compatibility code
   // Migration isn't being done right now, to allow a revert if needed
   const legacyAppsData = {
     stripe: {
+      enabled: !!eventType.price,
+      // Price default is 0 in DB. So, it would always be non nullish.
+      price: eventType.price,
+      // Currency default is "usd" in DB.So, it would also be available always
+      currency: eventType.currency,
+      paymentOption: "ON_BOOKING",
+    },
+    mercadopagopayment: {
       enabled: !!eventType.price,
       // Price default is 0 in DB. So, it would always be non nullish.
       price: eventType.price,
