@@ -26,6 +26,7 @@ import { metadata as hubspot__metadata_ts } from "./hubspot/_metadata";
 import { metadata as huddle01video__metadata_ts } from "./huddle01video/_metadata";
 import { metadata as jitsivideo__metadata_ts } from "./jitsivideo/_metadata";
 import { metadata as larkcalendar__metadata_ts } from "./larkcalendar/_metadata";
+import { metadata as mercadopagopayment__metadata_ts } from "./mercadopagopayment/_metadata";
 import metapixel_config_json from "./metapixel/config.json";
 import mirotalk_config_json from "./mirotalk/config.json";
 import n8n_config_json from "./n8n/config.json";
@@ -43,7 +44,6 @@ import sendgrid_config_json from "./sendgrid/config.json";
 import signal_config_json from "./signal/config.json";
 import sirius_video_config_json from "./sirius_video/config.json";
 import { metadata as stripepayment__metadata_ts } from "./stripepayment/_metadata";
-import { metadata as mercadopagopayment__metadata_ts } from "./mercadopagopayment/_metadata";
 import sylapsvideo_config_json from "./sylapsvideo/config.json";
 import { metadata as tandemvideo__metadata_ts } from "./tandemvideo/_metadata";
 import telegram_config_json from "./telegram/config.json";
@@ -92,6 +92,7 @@ export const appStoreMetadata = {
   huddle01video: huddle01video__metadata_ts,
   jitsivideo: jitsivideo__metadata_ts,
   larkcalendar: larkcalendar__metadata_ts,
+  mercadopagopayment: mercadopagopayment__metadata_ts,
   metapixel: metapixel_config_json,
   mirotalk: mirotalk_config_json,
   n8n: n8n_config_json,
@@ -109,7 +110,6 @@ export const appStoreMetadata = {
   signal: signal_config_json,
   sirius_video: sirius_video_config_json,
   stripepayment: stripepayment__metadata_ts,
-  mercadopagopayment: mercadopagopayment__metadata_ts,
   sylapsvideo: sylapsvideo_config_json,
   tandemvideo: tandemvideo__metadata_ts,
   telegram: telegram_config_json,
