@@ -133,7 +133,7 @@ export function availabilityAsString(
 ) {
   const weekSpan = (availability: Availability) => {
     const days = availability.days.slice(1).reduce(
-      (days, day) => {
+      (days: any, day: any) => {
         if (days[days.length - 1].length === 1 && days[days.length - 1][0] === day - 1) {
           // append if the range is not complete (but the next day needs adding)
           days[days.length - 1].push(day);
@@ -149,7 +149,7 @@ export function availabilityAsString(
       [[availability.days[0]]] as number[][]
     );
     return days
-      .map((dayRange) => dayRange.map((day) => nameOfDay(locale, day, "short")).join(" - "))
+      .map((dayRange: any) => dayRange.map((day: any) => nameOfDay(locale, day, "short")).join(" - "))
       .join(", ");
   };
 
