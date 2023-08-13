@@ -9,7 +9,7 @@ tasks:
     command: yarn dx
 
 ports:
-  - port: 3000
+  - port: 80
     visibility: public
     onOpen: open-preview
   - port: 5420
