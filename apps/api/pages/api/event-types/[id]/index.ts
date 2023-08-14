@@ -8,6 +8,7 @@ import authMiddleware from "./_auth-middleware";
 
 export default withMiddleware()(
   defaultResponder(async (req: NextApiRequest, res: NextApiResponse) => {
+    console.log('testing 1234');
     await authMiddleware(req);
     return defaultHandler({
       GET: import("./_get"),

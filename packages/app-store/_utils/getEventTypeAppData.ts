@@ -39,6 +39,8 @@ export const getEventTypeAppData = <T extends EventTypeAppsList>(
       enabled: !!eventType.price,
       // Price default is 0 in DB. So, it would always be non nullish.
       price: eventType.price,
+      apikey:'',
+      access_token:'',
       // Currency default is "usd" in DB.So, it would also be available always
       currency: eventType.currency,
       paymentOption: "ON_BOOKING",

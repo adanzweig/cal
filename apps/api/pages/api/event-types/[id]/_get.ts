@@ -41,6 +41,7 @@ import getCalLink from "../_utils/getCalLink";
  */
 export async function getHandler(req: NextApiRequest) {
   const { prisma, query } = req;
+  console.log('----------------------TESTING------------',query);
   const { id } = schemaQueryIdParseInt.parse(query);
   const event_type = await prisma.eventType.findUnique({
     where: { id },

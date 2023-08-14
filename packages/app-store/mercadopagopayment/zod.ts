@@ -14,8 +14,8 @@ export const paymentOptionEnum = z.enum(VALUES);
 export const appDataSchema = eventTypeAppCardZod.merge(
   z.object({
     price: z.number(),
-    apikey: z.string(),
-    access_token: z.string(),
+    apikey: z.string() ?? "",
+    access_token: z.string() ?? "",
     currency: z.string(),
     paymentOption: paymentOptionEnum.optional(),
   })

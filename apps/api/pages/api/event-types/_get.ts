@@ -36,7 +36,7 @@ import getCalLink from "./_utils/getCalLink";
  */
 async function getHandler(req: NextApiRequest) {
   const { userId, isAdmin, prisma } = req;
-
+  console.log("eventType    -----------", req.query);
   const args: Prisma.EventTypeFindManyArgs = {
     where: { userId },
   };
@@ -47,6 +47,7 @@ async function getHandler(req: NextApiRequest) {
     const userIds = Array.isArray(query.userId) ? query.userId : [query.userId || userId];
     args.where = { userId: { in: userIds } };
   }
+
   const data = await prisma.eventType.findMany({
     ...args,
     include: {

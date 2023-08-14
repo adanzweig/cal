@@ -84,6 +84,7 @@ export const getBookingFieldsWithSystemFields = ({
   }>["workflows"];
 }) => {
   const parsedMetaData = EventTypeMetaDataSchema.parse(metadata || {});
+  console.log(parsedMetaData, "parsedMetadata--------");
   const parsedBookingFields = eventTypeBookingFields.parse(bookingFields || []);
   const parsedCustomInputs = customInputSchema.array().parse(customInputs || []);
   workflows = workflows || [];

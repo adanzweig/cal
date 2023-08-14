@@ -28,6 +28,8 @@ export default function getPaymentAppData(
     price: number;
     currency: string;
     appId: EventTypeAppsList | null;
+    apikey: string,
+    access_token:string,
     paymentOption: typeof paymentOptionEnum;
   } | null = null;
   for (const appId of paymentAppIds) {
@@ -42,6 +44,6 @@ export default function getPaymentAppData(
   // This is the current expectation of system to have price and currency set always(using DB Level defaults).
   // Newly added apps code should assume that their app data might not be set.
   return (
-    paymentAppData || { enabled: false, price: 0, currency: "ars", appId: null, paymentOption: "ON_BOOKING" }
+    paymentAppData || { enabled: false, price: 0, currency: "ars", appId: null, paymentOption: "ON_BOOKING",apikey:"",access_token:"" }
   );
 }
