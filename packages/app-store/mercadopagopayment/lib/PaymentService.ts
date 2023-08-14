@@ -97,8 +97,8 @@ export class PaymentService implements IAbstractPaymentService {
           data: Object.assign({}, paymentIntent, {
             stripe_publishable_key: this.credentials.stripe_publishable_key,
             stripeAccount: this.credentials.stripe_user_id,
-            access_token: payment.access_token,
-            apikey: payment.apikey,
+            access_token: payment?.access_token??'',
+            apikey: payment?.apikey??'',
           }) as unknown as Prisma.InputJsonValue,
           fee: paymentFee,
           refunded: false,

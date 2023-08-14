@@ -32,6 +32,7 @@ export const EventAppsTab = ({ eventType }: { eventType: EventType }) => {
   };
 
   const getAppDataGetter = (appId: EventTypeAppsList): GetAppData => {
+    console.log("getAppData",key);
     return function (key) {
       const appData = allAppsData[appId as keyof typeof allAppsData] || {};
       if (key) {
