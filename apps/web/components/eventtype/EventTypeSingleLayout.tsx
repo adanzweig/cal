@@ -77,43 +77,43 @@ function getNavigation(props: {
 }) {
   const { eventType, t, enabledAppsNumber, installedAppsNumber, enabledWorkflowsNumber } = props;
   const duration =
-    eventType.metadata?.multipleDuration?.map((duration) => ` ${duration}`) || eventType.length;
+    eventType?.metadata?.multipleDuration?.map((duration) => ` ${duration}`) || eventType?.length;
 
   return [
     {
       name: "event_setup_tab_title",
-      href: `/event-types/${eventType.id}?tabName=setup`,
+      href: `/event-types/${eventType?.id}?tabName=setup`,
       icon: LinkIcon,
       info: `${duration} ${t("minute_timeUnit")}`, // TODO: Get this from props
     },
     {
       name: "event_limit_tab_title",
-      href: `/event-types/${eventType.id}?tabName=limits`,
+      href: `/event-types/${eventType?.id}?tabName=limits`,
       icon: Clock,
       info: `event_limit_tab_description`,
     },
     {
       name: "event_advanced_tab_title",
-      href: `/event-types/${eventType.id}?tabName=advanced`,
+      href: `/event-types/${eventType?.id}?tabName=advanced`,
       icon: Sliders,
       info: `event_advanced_tab_description`,
     },
     {
       name: "recurring",
-      href: `/event-types/${eventType.id}?tabName=recurring`,
+      href: `/event-types/${eventType?.id}?tabName=recurring`,
       icon: Repeat,
       info: `recurring_event_tab_description`,
     },
     {
       name: "apps",
-      href: `/event-types/${eventType.id}?tabName=apps`,
+      href: `/event-types/${eventType?.id}?tabName=apps`,
       icon: Grid,
       //TODO: Handle proper translation with count handling
       info: `${installedAppsNumber} apps, ${enabledAppsNumber} ${t("active")}`,
     },
     {
       name: "workflows",
-      href: `/event-types/${eventType.id}?tabName=workflows`,
+      href: `/event-types/${eventType?.id}?tabName=workflows`,
       icon: Zap,
       info: `${enabledWorkflowsNumber} ${t("active")}`,
     },
@@ -141,7 +141,7 @@ function EventTypeSingleLayout({
   const hasPermsToDelete =
     currentUserMembership?.role !== "MEMBER" ||
     !currentUserMembership ||
-    eventType.schedulingType === SchedulingType.MANAGED;
+    eventType?.schedulingType === SchedulingType.MANAGED;
 
   const deleteMutation = trpc.viewer.eventTypes.delete.useMutation({
     onSuccess: async () => {
@@ -180,28 +180,28 @@ function EventTypeSingleLayout({
 
     navigation.splice(1, 0, {
       name: "availability",
-      href: `/event-types/${eventType.id}?tabName=availability`,
+      href: `/event-types/${eventType?.id}?tabName=availability`,
       icon: Calendar,
       info:
         isManagedEventType || isChildrenManagedEventType
-          ? eventType.schedule === null
+          ? eventType?.schedule === null
             ? "members_default_schedule"
             : isChildrenManagedEventType
             ? `${
-                eventType.scheduleName
-                  ? `${eventType.scheduleName} - ${t("managed")}`
+                eventType?.scheduleName
+                  ? `${eventType?.scheduleName} - ${t("managed")}`
                   : `default_schedule_name`
               }`
-            : eventType.scheduleName ?? `default_schedule_name`
-          : eventType.scheduleName ?? `default_schedule_name`,
+            : eventType?.scheduleName ?? `default_schedule_name`
+          : eventType?.scheduleName ?? `default_schedule_name`,
     });
     // If there is a team put this navigation item within the tabs
     if (team) {
       navigation.splice(2, 0, {
         name: "assignment",
-        href: `/event-types/${eventType.id}?tabName=team`,
+        href: `/event-types/${eventType?.id}?tabName=team`,
         icon: Users,
-        info: `${t(eventType.schedulingType?.toLowerCase() ?? "")}${
+        info: `${t(eventType?.schedulingType?.toLowerCase() ?? "")}${
           isManagedEventType
             ? ` - ${t("count_members", { count: formMethods.watch("children").length || 0 })}`
             : ""
@@ -214,9 +214,9 @@ function EventTypeSingleLayout({
     } else {
       navigation.push({
         name: "webhooks",
-        href: `/event-types/${eventType.id}?tabName=webhooks`,
+        href: `/event-types/${eventType?.id}?tabName=webhooks`,
         icon: TbWebhook,
-        info: `${eventType.webhooks.filter((webhook) => webhook.active).length} ${t("active")}`,
+        info: `${eventType?.webhooks.filter((webhook) => webhook.active).length} ${t("active")}`,
       });
     }
     return navigation;
@@ -233,21 +233,21 @@ function EventTypeSingleLayout({
     formMethods,
   ]);
 
-  const permalink = `${CAL_URL}/${team ? `team/${team.slug}` : eventType.users[0].username}/${
-    eventType.slug
+  const permalink = `${CAL_URL}/${team ? `team/${team.slug}` : eventType?.users[0].username}/${
+    eventType?.slug
   }`;
 
-  const embedLink = `${team ? `team/${team.slug}` : eventType.users[0].username}/${eventType.slug}`;
-  const isManagedEvent = eventType.schedulingType === SchedulingType.MANAGED ? "_managed" : "";
+  const embedLink = `${team ? `team/${team.slug}` : eventType?.users[0].username}/${eventType?.slug}`;
+  const isManagedEvent = eventType?.schedulingType === SchedulingType.MANAGED ? "_managed" : "";
 
   return (
     <Shell
       backPath="/event-types"
-      title={eventType.title + " | " + t("event_type")}
-      heading={eventType.title}
+      title={eventType?.title + " | " + t("event_type")}
+      heading={eventType?.title}
       CTA={
         <div className="flex items-center justify-end">
-          {!eventType.metadata?.managedEventConfig && (
+          {!eventType?.metadata?.managedEventConfig && (
             <>
               <div
                 className={classNames(
@@ -432,7 +432,7 @@ function EventTypeSingleLayout({
           loadingText={t(`confirm_delete_event_type`)}
           onConfirm={(e) => {
             e.preventDefault();
-            deleteMutation.mutate({ id: eventType.id });
+            deleteMutation.mutate({ id: eventType?.id });
           }}>
           <p className="mt-5">
             <Trans
