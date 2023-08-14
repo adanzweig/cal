@@ -49,19 +49,19 @@ const getLocationFromType = (
 
 const getLocationInfo = (props: Pick<EventTypeSetupProps, "eventType" | "locationOptions">) => {
   const locationAvailable =
-    props.eventType.locations &&
-    props.eventType.locations.length > 0 &&
+    props.eventType?.locations &&
+    props.eventType?.locations.length > 0 &&
     props.locationOptions.some((op) =>
-      op.options.find((opt) => opt.value === props.eventType.locations[0].type)
+      op.options.find((opt) => opt.value === props.eventType?.locations[0].type)
     );
-  const locationDetails = props.eventType.locations &&
-    props.eventType.locations.length > 0 &&
+  const locationDetails = props.eventType?.locations &&
+    props.eventType?.locations.length > 0 &&
     !locationAvailable && {
-      slug: props.eventType.locations[0].type
+      slug: props.eventType?.locations[0].type
         .replace("integrations:", "")
         .replace(":", "-")
         .replace("_video", ""),
-      name: props.eventType.locations[0].type
+      name: props.eventType?.locations[0].type
         .replace("integrations:", "")
         .replace(":", " ")
         .replace("_video", "")
@@ -115,7 +115,7 @@ export const EventSetupTab = (
   const [showLocationModal, setShowLocationModal] = useState(false);
   const [editingLocationType, setEditingLocationType] = useState<string>("");
   const [selectedLocation, setSelectedLocation] = useState<LocationOption | undefined>(undefined);
-  const [multipleDuration, setMultipleDuration] = useState(eventType.metadata?.multipleDuration);
+  const [multipleDuration, setMultipleDuration] = useState(eventType?.metadata?.multipleDuration);
 
   const locationOptions = props.locationOptions.map((locationOption) => {
     const options = locationOption.options.filter((option) => {
@@ -141,7 +141,7 @@ export const EventSetupTab = (
     }>
   >(multipleDurationOptions.filter((mdOpt) => multipleDuration?.includes(mdOpt.value)));
   const [defaultDuration, setDefaultDuration] = useState(
-    selectedMultipleDuration.find((opt) => opt.value === eventType.length) ?? null
+    selectedMultipleDuration.find((opt) => opt.value === eventType?.length) ?? null
   );
 
   const openLocationModal = (type: EventLocationType["type"], address = "") => {
@@ -158,7 +158,7 @@ export const EventSetupTab = (
     setShowLocationModal(true);
   };
 
-  const removeLocation = (selectedLocation: (typeof eventType.locations)[number]) => {
+  const removeLocation = (selectedLocation: (typeof eventType?.locations)[number]) => {
     formMethods.setValue(
       "locations",
       formMethods.getValues("locations").filter((location) => {
@@ -346,7 +346,7 @@ export const EventSetupTab = (
                     The “Add to calendar” for this event type needs to be a Google Calendar for Meet to work.
                     Change it{" "}
                     <Link
-                      href={`${CAL_URL}/event-types/${eventType.id}?tabName=advanced`}
+                      href={`${CAL_URL}/event-types/${eventType?.id}?tabName=advanced`}
                       className="underline">
                       here.
                     </Link>{" "}
@@ -389,7 +389,7 @@ export const EventSetupTab = (
           required
           label={t("title")}
           {...shouldLockDisableProps("title")}
-          defaultValue={eventType.title}
+          defaultValue={eventType?.title}
           {...formMethods.register("title")}
         />
         <div>
@@ -406,14 +406,14 @@ export const EventSetupTab = (
           required
           label={t("URL")}
           {...shouldLockDisableProps("slug")}
-          defaultValue={eventType.slug}
+          defaultValue={eventType?.slug}
           addOnLeading={
             <>
               {CAL_URL?.replace(/^(https?:|)\/\//, "")}/
               {!isManagedEventType
                 ? team
                   ? "team/" + team.slug
-                  : eventType.users[0].username
+                  : eventType?.users[0].username
                 : t("username_placeholder")}
               /
             </>
@@ -488,7 +488,7 @@ export const EventSetupTab = (
             type="number"
             {...lengthLockedProps}
             label={t("duration")}
-            defaultValue={eventType.length ?? 15}
+            defaultValue={eventType?.length ?? 15}
             {...formMethods.register("length")}
             addOnSuffix={<>{t("minutes")}</>}
             min={1}
@@ -503,7 +503,7 @@ export const EventSetupTab = (
                 if (multipleDuration !== undefined) {
                   setMultipleDuration(undefined);
                   formMethods.setValue("metadata.multipleDuration", undefined);
-                  formMethods.setValue("length", eventType.length);
+                  formMethods.setValue("length", eventType?.length);
                 } else {
                   setMultipleDuration([]);
                   formMethods.setValue("metadata.multipleDuration", []);
@@ -522,7 +522,7 @@ export const EventSetupTab = (
           <Controller
             name="locations"
             control={formMethods.control}
-            defaultValue={eventType.locations || []}
+            defaultValue={eventType?.locations || []}
             render={() => <Locations />}
           />
         </div>
