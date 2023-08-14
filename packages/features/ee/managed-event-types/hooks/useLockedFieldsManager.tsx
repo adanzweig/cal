@@ -22,14 +22,14 @@ const useLockedFieldsManager = (
   memberLabel: string
 ) => {
   const unlockedFields =
-    (eventType.metadata?.managedEventConfig?.unlockedFields !== undefined &&
-      eventType.metadata?.managedEventConfig?.unlockedFields) ||
+    (eventType?.metadata?.managedEventConfig?.unlockedFields !== undefined &&
+      eventType?.metadata?.managedEventConfig?.unlockedFields) ||
     {};
 
-  const isManagedEventType = eventType.schedulingType === SchedulingType.MANAGED;
+  const isManagedEventType = eventType?.schedulingType === SchedulingType.MANAGED;
   const isChildrenManagedEventType =
-    eventType.metadata?.managedEventConfig !== undefined &&
-    eventType.schedulingType !== SchedulingType.MANAGED;
+    eventType?.metadata?.managedEventConfig !== undefined &&
+    eventType?.schedulingType !== SchedulingType.MANAGED;
 
   const shouldLockIndicator = (fieldName: string) => {
     let locked = isManagedEventType || isChildrenManagedEventType;
@@ -46,7 +46,7 @@ const useLockedFieldsManager = (
     return {
       disabled:
         !isManagedEventType &&
-        eventType.metadata?.managedEventConfig !== undefined &&
+        eventType?.metadata?.managedEventConfig !== undefined &&
         unlockedFields[fieldName as keyof Omit<Prisma.EventTypeSelect, "id">] === undefined,
       LockedIcon: shouldLockIndicator(fieldName),
     };
