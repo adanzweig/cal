@@ -39,7 +39,6 @@ export default async function getEventTypeById({
     locale: true,
     defaultScheduleId: true,
   });
-  console.log("pasa por aca 1---------------------");
   const rawEventType = await prisma.eventType.findFirst({
     where: {
       AND: [
@@ -213,7 +212,6 @@ export default async function getEventTypeById({
       },
     },
   });
-  console.log("HAY ALGO ACA????------------------------------");
   if (!rawEventType) {
     if (isTrpcCall) {
       throw new TRPCError({ code: "NOT_FOUND" });
@@ -221,7 +219,6 @@ export default async function getEventTypeById({
       throw new Error("Event type not found");
     }
   }
-  console.log("HAY ALGO ACA222222????------------------------------");
 
   const credentials = await prisma.credential.findMany({
     where: {
@@ -239,12 +236,10 @@ export default async function getEventTypeById({
       invalid: true,
     },
   });
-  console.log("11111111");
   const { locations, metadata, ...restEventType } = rawEventType;
   console.log(rawEventType, metadata, rawEventType.metadata);
   const newMetadata = EventTypeMetaDataSchema.parse(rawEventType.metadata || {}) || {};
   const apps = newMetadata?.apps || {};
-  console.log("111111122222221");
   const eventTypeWithParsedMetadata = { ...rawEventType, metadata: newMetadata };
   const stripeMetaData = getPaymentAppData(eventTypeWithParsedMetadata, true);
   console.log("1111111222222213214234324", eventTypeWithParsedMetadata);
@@ -271,7 +266,6 @@ export default async function getEventTypeById({
   const parsedMetaData = newMetadata;
 
   const parsedCustomInputs = (rawEventType.customInputs || []).map((input) => customInputSchema.parse(input));
-  console.log("asdasdsad-as-ds-ad-sad-s234234a");
   const eventType = {
     ...restEventType,
     schedule: rawEventType.schedule?.id || rawEventType.users[0]?.defaultScheduleId || null,
@@ -375,7 +369,6 @@ export default async function getEventTypeById({
       },
     });
   }
-  console.log("asdasdsad-as-ds-ad-sad-123231234");
 
   const finalObj = {
     eventType: eventTypeObject,

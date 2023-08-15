@@ -198,12 +198,14 @@ import checkTeamEventEditPermission from "../_utils/checkTeamEventEditPermission
  */
 export async function patchHandler(req: NextApiRequest) {
   const { prisma, query, body } = req;
+  console.log("testing 123", body);
   const { id } = schemaQueryIdParseInt.parse(query);
   const { hosts = [], ...parsedBody } = schemaEventTypeEditBodyParams.parse(body);
 
   const data: Prisma.EventTypeUpdateArgs["data"] = {
     ...parsedBody,
   };
+  console.log("update entity-type with: ", data);
 
   if (hosts) {
     await ensureOnlyMembersAsHosts(req, parsedBody);
