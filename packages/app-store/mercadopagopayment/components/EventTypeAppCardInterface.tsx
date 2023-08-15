@@ -19,7 +19,7 @@ const EventTypeAppCard: EventTypeAppCardComponent = function EventTypeAppCard({ 
   const price = getAppData("price") ?? "";
   const apikey = getAppData("apikey") ?? "";
   const accessToken = getAppData("access_token");
-  const currency = getAppData("currency");
+  const currency = getAppData("currency") ?? "ARS";
   const paymentOption = getAppData("paymentOption");
   const paymentOptionSelectValue = paymentOptions.find((option) => paymentOption === option.value);
   const [requirePayment, setRequirePayment] = useState(getAppData("enabled"));
