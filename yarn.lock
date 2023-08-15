@@ -3896,7 +3896,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@calcom/emails@*, @calcom/emails@workspace:packages/emails":
+"@calcom/emails@*, @calcom/emails@workspace:^, @calcom/emails@workspace:packages/emails":
   version: 0.0.0-use.local
   resolution: "@calcom/emails@workspace:packages/emails"
   dependencies:
@@ -15196,6 +15196,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "calcom-monorepo@workspace:."
   dependencies:
+    "@calcom/emails": "workspace:^"
     "@changesets/cli": ^2.26.1
     "@deploysentinel/playwright": ^0.3.3
     "@playwright/test": ^1.31.2

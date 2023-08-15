@@ -311,7 +311,7 @@ const EventTypePage = (props: EventTypeSetupProps) => {
 
   if (appsMetadata) {
     numberOfActiveApps = Object.entries(appsMetadata).filter(
-      ([appId, appData]) => eventTypeApps?.find((app) => app.slug === appId)?.isInstalled && appData.enabled
+      ([appId, appData]) => eventTypeApps?.find((app) => app.slug === appId)?.isInstalled && appData?.enabled
     ).length;
   }
 
