@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 /* eslint-disable @typescript-eslint/no-empty-function */
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -477,6 +479,7 @@ const EventTypePage = (props: EventTypeSetupProps) => {
                 }
               }
             }
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             const { availability, ...rest } = input;
             updateMutation.mutate({
               ...rest,

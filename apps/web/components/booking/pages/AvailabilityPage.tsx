@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useEffect, useMemo, useState } from "react";

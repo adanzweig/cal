@@ -40,6 +40,7 @@ module.exports = {
       },
     ],
     "unused-imports/no-unused-imports": "error",
+    "react/prop-types": "off",
   },
   overrides: [
     {

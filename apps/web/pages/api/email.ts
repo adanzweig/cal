@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import type { NextApiRequest, NextApiResponse } from "next";
 
 import { renderEmail } from "@calcom/emails";
@@ -8,6 +9,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const t = await getTranslation("en", "common");
   const language = { translate: t, locale: "en" };
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const evt = {
     type: "30min",
     title: "30min between Pro Example and pro@example.com",

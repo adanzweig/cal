@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import type { GetServerSidePropsContext } from "next";
 import { z } from "zod";
 

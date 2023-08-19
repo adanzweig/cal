@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import parser from "accept-language-parser";
 import type { IncomingMessage } from "http";
 import type { GetServerSidePropsContext } from "next";

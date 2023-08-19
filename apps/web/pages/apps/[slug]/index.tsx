@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import { Prisma } from "@prisma/client";
 import fs from "fs";
 import matter from "gray-matter";

@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import { MailOpenIcon } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";

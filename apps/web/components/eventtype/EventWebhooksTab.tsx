@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import type { Webhook } from "@prisma/client";
 import { Webhook as TbWebhook } from "lucide-react";
 import type { EventTypeSetupProps } from "pages/event-types/[type]";

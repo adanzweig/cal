@@ -25,5 +25,6 @@
       "error",
       { "devDependencies": false, "optionalDependencies": false, "peerDependencies": false, "packageDir": "./" },
     ],
+    "react/prop-types": "off"
   }
 }

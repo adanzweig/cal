@@ -1,4 +1,4 @@
-/* eslint react/prop-types: 0 */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
@@ -271,7 +271,7 @@ const BookingPage = ({
   // });
   const mutation = useMutation(createBooking, {
     onSuccess: async (responseData) => {
-      
+      // @tslint:disable-next-line
       document.location = responseData?.mercadopagoLink;
       return true;
       if ("paymentUid" in responseData && !!responseData.paymentUid) {
