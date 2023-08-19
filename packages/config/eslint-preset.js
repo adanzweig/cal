@@ -27,7 +27,7 @@ module.exports = {
     "react/self-closing-comp": ["error", { component: true, html: true }],
     "import/no-extraneous-dependencies": [
       "error",
-      { devDependencies: false, optionalDependencies: false, peerDependencies: false },
+      { devDependencies: false, optionalDependencies: false, peerDependencies: false, packageDir: "./" },
     ],
     "@typescript-eslint/no-unused-vars": [
       "warn",
