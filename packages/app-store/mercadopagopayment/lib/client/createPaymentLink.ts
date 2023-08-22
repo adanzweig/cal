@@ -1,5 +1,4 @@
 import { stringify } from "querystring";
-import request from "sync-request";
 
 import { WEBSITE_URL } from "@calcom/lib/constants";
 
@@ -22,7 +21,7 @@ export function createPaymentLink(opts: {
   if (absolute) link = WEBSITE_URL;
 
   const query = stringify({ date, name, email });
-  console.log("linkExpected", link2);
+  // console.log("linkExpected", link2);
   // return reqst.data.init_point;
 
   return link + `/payment/${paymentUid}?${query}`;

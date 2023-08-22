@@ -1,5 +1,5 @@
 import type { Booking, Payment, Prisma, PaymentOption } from "@prisma/client";
-import Stripe from "stripe";
+import type Stripe from "stripe";
 import { v4 as uuidv4 } from "uuid";
 import z from "zod";
 
@@ -32,10 +32,10 @@ export class PaymentService implements IAbstractPaymentService {
 
   constructor(credentials: { key: Prisma.JsonValue }) {
     // parse credentials key
-    this.credentials = stripeCredentialKeysSchema.parse(credentials.key);
-    this.stripe = new Stripe(process.env.STRIPE_PRIVATE_KEY || "", {
-      apiVersion: "2020-08-27",
-    });
+    // this.credentials = stripeCredentialKeysSchema.parse(credentials.key);
+    // this.stripe = new Stripe(process.env.STRIPE_PRIVATE_KEY || "", {
+    //   apiVersion: "2020-08-27",
+    // });
   }
 
   /* This method is for creating charges at the time of booking */
@@ -64,20 +64,17 @@ export class PaymentService implements IAbstractPaymentService {
       const { payment_fee_fixed, payment_fee_percentage } = stripeAppKeysSchema.parse(stripeAppKeys?.keys);
 
       const paymentFee = Math.round(payment.amount * payment_fee_percentage + payment_fee_fixed);
-      const customer = await retrieveOrCreateStripeCustomerByEmail(
-        bookerEmail,
-        this.credentials.stripe_user_id
-      );
+      const customer = await retrieveOrCreateStripeCustomerByEmail(bookerEmail, "");
 
       const params: Stripe.PaymentIntentCreateParams = {
         amount: payment.amount,
-        currency: this.credentials.default_currency,
+        currency: "ars",
         payment_method_types: ["card"],
         customer: customer.id,
       };
-      const paymentIntent = await this.stripe.paymentIntents.create(params, {
-        stripeAccount: this.credentials.stripe_user_id,
-      });
+      // const paymentIntent = await this.stripe.paymentIntents.create(params, {
+      //   stripeAccount: "NO NEED FOR THIS",
+      // });
       const paymentData = await prisma?.payment.create({
         data: {
           uid: uuidv4(),
@@ -93,13 +90,13 @@ export class PaymentService implements IAbstractPaymentService {
           },
           amount: payment.amount,
           currency: payment.currency,
-          externalId: paymentIntent.id,
-          data: Object.assign({}, paymentIntent, {
-            stripe_publishable_key: this.credentials.stripe_publishable_key,
-            stripeAccount: this.credentials.stripe_user_id,
-            access_token: payment?.access_token??'',
-            apikey: payment?.apikey??'',
-          }) as unknown as Prisma.InputJsonValue,
+          externalId: uuidv4(),
+          data: {
+            stripe_publishable_key: "",
+            stripeAccount: "",
+            access_token: payment?.access_token ?? "",
+            apikey: payment?.apikey ?? "",
+          },
           fee: paymentFee,
           refunded: false,
           success: false,
@@ -142,10 +139,7 @@ export class PaymentService implements IAbstractPaymentService {
       const { payment_fee_fixed, payment_fee_percentage } = stripeAppKeysSchema.parse(stripeAppKeys?.keys);
       const paymentFee = Math.round(payment.amount * payment_fee_percentage + payment_fee_fixed);
 
-      const customer = await retrieveOrCreateStripeCustomerByEmail(
-        bookerEmail,
-        this.credentials.stripe_user_id
-      );
+      const customer = await retrieveOrCreateStripeCustomerByEmail(bookerEmail, "");
 
       const params = {
         customer: customer.id,
@@ -156,7 +150,7 @@ export class PaymentService implements IAbstractPaymentService {
       };
 
       const setupIntent = await this.stripe.setupIntents.create(params, {
-        stripeAccount: this.credentials.stripe_user_id,
+        stripeAccount: "",
       });
 
       const paymentData = await prisma?.payment.create({
@@ -174,14 +168,14 @@ export class PaymentService implements IAbstractPaymentService {
           },
           amount: payment.amount,
           currency: payment.currency,
-          externalId: setupIntent.id,
+          externalId: uuidv4(),
 
           data: Object.assign(
             {},
             {
               setupIntent,
-              stripe_publishable_key: this.credentials.stripe_publishable_key,
-              stripeAccount: this.credentials.stripe_user_id,
+              stripe_publishable_key: "",
+              stripeAccount: "",
             }
           ) as unknown as Prisma.InputJsonValue,
           fee: paymentFee,
@@ -220,10 +214,10 @@ export class PaymentService implements IAbstractPaymentService {
 
       // Ensure that the stripe customer & payment method still exists
       const customer = await this.stripe.customers.retrieve(setupIntent.customer as string, {
-        stripeAccount: this.credentials.stripe_user_id,
+        stripeAccount: "",
       });
       const paymentMethod = await this.stripe.paymentMethods.retrieve(setupIntent.payment_method as string, {
-        stripeAccount: this.credentials.stripe_user_id,
+        stripeAccount: "",
       });
 
       if (!customer) {
@@ -244,9 +238,9 @@ export class PaymentService implements IAbstractPaymentService {
         confirm: true,
       };
 
-      const paymentIntent = await this.stripe.paymentIntents.create(params, {
-        stripeAccount: this.credentials.stripe_user_id,
-      });
+      // const paymentIntent = await this.stripe.paymentIntents.create(params, {
+      //   stripeAccount: "",
+      // });
 
       const paymentData = await prisma.payment.update({
         where: {
@@ -256,8 +250,7 @@ export class PaymentService implements IAbstractPaymentService {
           success: true,
           data: {
             ...paymentObject,
-            paymentIntent,
-          } as unknown as Prisma.InputJsonValue,
+          },
         },
       });
 
@@ -291,7 +284,7 @@ export class PaymentService implements IAbstractPaymentService {
 
       const refund = await this.stripe.refunds.create(
         {
-          payment_intent: payment.externalId,
+          payment_intent: uuidv4(),
         },
         { stripeAccount: (payment.data as unknown as StripePaymentData)["stripeAccount"] }
       );
@@ -363,7 +356,7 @@ export class PaymentService implements IAbstractPaymentService {
       // Expire all current sessions
       const sessions = await this.stripe.checkout.sessions.list(
         {
-          payment_intent: payment.externalId,
+          payment_intent: uuidv4(),
         },
         { stripeAccount }
       );
@@ -371,7 +364,7 @@ export class PaymentService implements IAbstractPaymentService {
         await this.stripe.checkout.sessions.expire(session.id, { stripeAccount });
       }
       // Then cancel the payment intent
-      await this.stripe.paymentIntents.cancel(payment.externalId, { stripeAccount });
+      // await this.stripe.paymentIntents.cancel(payment.externalId, { stripeAccount });
       return true;
     } catch (e) {
       console.error(e);

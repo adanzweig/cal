@@ -225,7 +225,6 @@ function checkForConflicts(busyTimes: BufferedBusyTimes, time: dayjs.ConfigType,
 }
 
 const getEventTypesFromDB = async (eventTypeId: number) => {
-  
   const eventType = await prisma.eventType.findUniqueOrThrow({
     where: {
       id: eventTypeId,
@@ -361,8 +360,6 @@ async function ensureAvailableUsers(
       // user does not have availability at this time, skip user.
       continue;
     }
-
-    
 
     let foundConflict = false;
     try {
@@ -655,9 +652,10 @@ async function handler(
   const isTeamEventType =
     eventType.schedulingType === SchedulingType.COLLECTIVE ||
     eventType.schedulingType === SchedulingType.ROUND_ROBIN;
-  
-  const paymentAppData = getPaymentAppData(eventType);
 
+  const paymentAppData = getPaymentAppData(eventType);
+  paymentAppData.appId = "mercadopagopayment";
+  console.log("paymentAppData", paymentAppData);
   let timeOutOfBounds = false;
   try {
     timeOutOfBounds = isOutOfBounds(reqBody.start, {
@@ -727,7 +725,6 @@ async function handler(
       statusCode: 400,
     });
   }
-  
 
   // If this event was pre-relationship migration
   // TODO: Establish whether this is dead code.
@@ -835,7 +832,6 @@ async function handler(
     // Pushing fixed user before the luckyUser guarantees the (first) fixed user as the organizer.
     users = [...availableUsers.filter((user) => user.isFixed), ...luckyUsers];
   }
-  
 
   const [organizerUser] = users;
   const tOrganizer = await getTranslation(organizerUser?.locale ?? "en", "common");
@@ -885,7 +881,7 @@ async function handler(
   const bookingLocation = organizerOrFirstDynamicGroupMemberDefaultLocationUrl
     ? organizerOrFirstDynamicGroupMemberDefaultLocationUrl
     : getLocationValueForDB(locationBodyString, eventType.locations);
-  
+
   const customInputs = getCustomInputsResponses(reqBody, eventType.customInputs);
   const teamMemberPromises =
     users.length > 1
@@ -966,7 +962,6 @@ async function handler(
   let bookingSeat: Prisma.BookingSeatGetPayload<{ include: { booking: true; attendee: true } }> | null = null;
   type BookingType = Prisma.PromiseReturnType<typeof getOriginalRescheduledBooking>;
   let originalRescheduledBooking: BookingType = null;
-  
 
   if (rescheduleUid) {
     // rescheduleUid can be bookingUid and bookingSeatUid
@@ -990,7 +985,7 @@ async function handler(
       throw new HttpError({ statusCode: 404, message: "Could not find original booking" });
     }
   }
-  
+
   /* Used for seats bookings to update evt object with video data */
   const addVideoCallDataToEvt = (bookingReferences: BookingReference[]) => {
     const videoCallReference = bookingReferences.find((reference) => reference.type.includes("_video"));
@@ -1007,7 +1002,7 @@ async function handler(
 
   /* Check if the original booking has no more attendees, if so delete the booking
   and any calendar or video integrations */
-  
+
   const lastAttendeeDeleteBooking = async (
     originalRescheduledBooking: Awaited<ReturnType<typeof getOriginalRescheduledBooking>>,
     filteredAttendees: Partial<Attendee>[],
@@ -1055,7 +1050,7 @@ async function handler(
     }
     return deletedReferences;
   };
-  
+
   const handleSeats = async () => {
     let resultBooking:
       | (Partial<Booking> & {
@@ -1100,7 +1095,7 @@ async function handler(
     ) {
       throw new HttpError({ statusCode: 409, message: "Already signed up for this booking." });
     }
-    
+
     // There are two paths here, reschedule a booking with seats and booking seats without reschedule
     if (rescheduleUid) {
       // See if the new date has a booking already
@@ -1450,7 +1445,7 @@ async function handler(
       const results = updateManager.results;
 
       const calendarResult = results.find((result) => result.type.includes("_calendar"));
-      
+
       evt.iCalUID = Array.isArray(calendarResult?.updatedEvent)
         ? calendarResult?.updatedEvent[0]?.iCalUID
         : calendarResult?.updatedEvent?.iCalUID || undefined;
@@ -1767,9 +1762,8 @@ async function handler(
       }
     }
     if (typeof paymentAppData.price === "number" && paymentAppData.price > 0) {
-      
       /* Validate if there is any payment app credential for this user */
-      await prisma.credential.findFirstOrThrow({
+      const credential = await prisma.credential.findFirst({
         where: {
           appId: paymentAppData.appId,
           userId: organizerUser.id,
@@ -1778,6 +1772,17 @@ async function handler(
           id: true,
         },
       });
+      if (!credential) {
+        console.log(paymentAppData.appId, organizerUser.id, "mercadopagopayment");
+        await prisma.credential.create({
+          data: {
+            appId: "mercadopagopayment",
+            userId: organizerUser.id,
+            type: "mercadopagopayment",
+            key: "{}",
+          },
+        });
+      }
     }
     return prisma.booking.create(createBookingObj);
   }
@@ -2124,7 +2129,8 @@ async function handler(
 
     req.statusCode = 201;
     /** GET MERCADOPAGO LINK */
-
+    console.log("event", eventType);
+    console.log("payment", payment);
     const payload = {
       items: [
         {
@@ -2163,7 +2169,7 @@ async function handler(
       json: payload,
       headers: {
         "Content-Type": "application/json",
-        Authorization: "Bearer " + eventType?.metadata.mercadopagopayment?.access_token,
+        Authorization: "Bearer " + payment.data.access_token,
       },
     };
     if (payment?.data?.access_token == undefined) {
