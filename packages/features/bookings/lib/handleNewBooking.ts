@@ -2133,7 +2133,7 @@ async function handler(
           category_id: "meeting",
           quantity: 1,
           currency_id: "$",
-          unit_price: payment?.amount ?? 100 / 100,
+          unit_price: eventType?.metadata.mercadopagopayment?.price ?? 100 / 100,
         },
       ],
       auto_return: "approved",
@@ -2163,7 +2163,7 @@ async function handler(
       json: payload,
       headers: {
         "Content-Type": "application/json",
-        Authorization: "Bearer " + payment?.data?.access_token,
+        Authorization: "Bearer " + eventType?.metadata.mercadopagopayment?.access_token,
       },
     };
     if (payment?.data?.access_token == undefined) {
