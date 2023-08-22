@@ -237,14 +237,14 @@ export default async function getEventTypeById({
     },
   });
   const { locations, metadata, ...restEventType } = rawEventType;
-  console.log(rawEventType, metadata, rawEventType.metadata);
+  
   const newMetadata = EventTypeMetaDataSchema.parse(rawEventType.metadata || {}) || {};
   const apps = newMetadata?.apps || {};
   const eventTypeWithParsedMetadata = { ...rawEventType, metadata: newMetadata };
   const stripeMetaData = getPaymentAppData(eventTypeWithParsedMetadata, true);
-  console.log("1111111222222213214234324", eventTypeWithParsedMetadata);
+  
   const mercadopagoMetaData = getPaymentAppData(eventTypeWithParsedMetadata, true);
-  console.log("111111122222221321423432423432432432", mercadopagoMetaData, rawEventType.metadata);
+  
   newMetadata.apps = {
     ...apps,
     stripe: {
@@ -259,7 +259,7 @@ export default async function getEventTypeById({
     mercadopagopayment: rawEventType?.metadata?.apps?.mercadopagopayment,
     giphy: getEventTypeAppData(eventTypeWithParsedMetadata, "giphy", true),
   };
-  console.log("asdasdsad-as-ds-ad-sad-sa");
+  
 
   // TODO: How to extract metadata schema from _EventTypeModel to be able to parse it?
   // const parsedMetaData = _EventTypeModel.parse(newMetadata);
