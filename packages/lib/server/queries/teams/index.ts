@@ -99,20 +99,24 @@ export async function getTeamWithMembers(id?: number, slug?: string, userId?: nu
   });
 
   if (!team) return null;
-  const members = team.members.map((obj) => {
-    return {
-      ...obj.user,
-      role: obj.role,
-      accepted: obj.accepted,
-      disableImpersonation: obj.disableImpersonation,
-      avatar: `${WEBAPP_URL}/${obj.user.username}/avatar.png`,
-    };
-  });
+  const members = team.members
+    .map((obj) => {
+      return {
+        ...obj.user,
+        role: obj.role,
+        accepted: obj.accepted,
+        disableImpersonation: obj.disableImpersonation,
+        avatar: `${WEBAPP_URL}/${obj.user.username}/avatar.png`,
+      };
+    })
+    .filter((m) => m.role !== "OWNER");
 
   const eventTypes = team.eventTypes.map((eventType) => ({
     ...eventType,
     metadata: EventTypeMetaDataSchema.parse(eventType.metadata),
   }));
+
+  console.log("team", team, "eventTypes", eventTypes, "members", members);
   return { ...team, metadata: teamMetadataSchema.parse(team.metadata), eventTypes, members };
 }
 

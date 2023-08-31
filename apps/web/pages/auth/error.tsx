@@ -34,11 +34,9 @@ export default function Error() {
           <X className="h-6 w-6 text-red-600" />
         </div>
         <div className="mt-3 text-center sm:mt-5">
-          <h3 className="text-emphasis text-lg font-medium leading-6" id="modal-title">
-            {error}
-          </h3>
+          <h3 className="text-emphasis text-lg font-medium leading-6" id="modal-title" />
           <div className="mt-2">
-            <p className="text-subtle text-sm">{errorMsg}</p>
+            <p className="text-subtle text-sm" />
           </div>
         </div>
       </div>
