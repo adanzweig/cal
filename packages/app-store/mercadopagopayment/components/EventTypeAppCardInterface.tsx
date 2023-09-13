@@ -75,6 +75,7 @@ const EventTypeAppCard: EventTypeAppCardComponent = function EventTypeAppCard({ 
                   placeholder="Price"
                   onChange={(e) => {
                     setAppData("price", Number(e.target.value) * 100);
+                    setAppData('currency','ars');
                   }}
                   value={price > 0 ? price / 100 : undefined}
                 />

@@ -44,7 +44,7 @@ const handlePayment = async (
     paymentData = await paymentInstance.collectCard(
       {
         amount: selectedEventType?.metadata?.apps?.[paymentAppCredentials.appId].price,
-        currency: selectedEventType?.metadata?.apps?.[paymentAppCredentials.appId].currency,
+        currency: selectedEventType?.metadata?.apps?.[paymentAppCredentials.appId].currency ?? "ars",
         access_token: selectedEventType?.metadata?.apps?.[paymentAppCredentials.appId].access_token ?? "",
         apikey: selectedEventType?.metadata?.apps?.[paymentAppCredentials.appId].apikey ?? "",
       },
@@ -56,7 +56,7 @@ const handlePayment = async (
     paymentData = await paymentInstance.create(
       {
         amount: selectedEventType?.metadata?.apps?.[paymentAppCredentials.appId].price,
-        currency: selectedEventType?.metadata?.apps?.[paymentAppCredentials.appId].currency,
+        currency: selectedEventType?.metadata?.apps?.[paymentAppCredentials.appId].currency ?? "ars",
         access_token: selectedEventType?.metadata?.apps?.[paymentAppCredentials.appId].access_token ?? "",
         apikey: selectedEventType?.metadata?.apps?.[paymentAppCredentials.appId].apikey ?? "",
       },
