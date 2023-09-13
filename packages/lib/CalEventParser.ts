@@ -13,7 +13,7 @@ const translator = short();
 
 export const getWhat = (calEvent: CalendarEvent, t: TFunction) => {
   return `
-${t("what")}:
+Evento:
 ${calEvent.type}
   `;
 };
@@ -59,7 +59,7 @@ ${member.email}
     : [];
 
   return `
-${t("who")}:
+Quien:
 ${organizer + attendees + teamMembers.join("")}
   `;
 };
@@ -185,7 +185,7 @@ ${getCancellationReason(calEvent, t)}
 ${getWhat(calEvent, t)}
 ${getWhen(calEvent, t)}
 ${getWho(calEvent, t)}
-${t("where")}:
+Donde:
 ${getLocation(calEvent)}
 ${getDescription(calEvent, t)}
 ${getAdditionalNotes(calEvent, t)}

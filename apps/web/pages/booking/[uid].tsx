@@ -30,7 +30,6 @@ import {
   SMS_REMINDER_NUMBER_FIELD,
 } from "@calcom/features/bookings/lib/getBookingFields";
 import { parseRecurringEvent } from "@calcom/lib";
-import { APP_NAME } from "@calcom/lib/constants";
 import {
   formatToLocalizedDate,
   formatToLocalizedTime,
@@ -49,7 +48,7 @@ import type { Prisma } from "@calcom/prisma/client";
 import { BookingStatus } from "@calcom/prisma/enums";
 import { bookingMetadataSchema } from "@calcom/prisma/zod-utils";
 import { customInputSchema, EventTypeMetaDataSchema } from "@calcom/prisma/zod-utils";
-import { Button, EmailInput, HeadSeo, Badge, useCalcomTheme, Alert } from "@calcom/ui";
+import { HeadSeo, Badge, useCalcomTheme, Alert } from "@calcom/ui";
 import { X, ExternalLink, ChevronLeft, Check, Calendar } from "@calcom/ui/components/icon";
 import { AlertCircle } from "@calcom/ui/components/icon";
 
@@ -674,7 +673,7 @@ export default function Success(props: SuccessProps) {
                     </>
                   )}
 
-                {session === null && !(userIsOwner || props.hideBranding) && (
+                {/* {session === null && !(userIsOwner || props.hideBranding) && (
                   <>
                     <hr className="border-subtle mt-8" />
                     <div className="text-default pt-8 text-center text-xs">
@@ -708,7 +707,7 @@ export default function Success(props: SuccessProps) {
                       </form>
                     </div>
                   </>
-                )}
+                )} */}
               </div>
               {isGmail && (
                 <Alert

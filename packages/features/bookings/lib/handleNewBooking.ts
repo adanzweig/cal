@@ -2129,7 +2129,6 @@ async function handler(
 
     req.statusCode = 201;
     /** GET MERCADOPAGO LINK */
-    console.log("event", eventType);
     console.log("payment", payment);
     const payload = {
       items: [
@@ -2139,7 +2138,7 @@ async function handler(
           category_id: "meeting",
           quantity: 1,
           currency_id: "$",
-          unit_price: eventType?.metadata.mercadopagopayment?.price ?? 100 / 100,
+          unit_price: payment.amount / 100,
         },
       ],
       auto_return: "approved",
@@ -2179,12 +2178,21 @@ async function handler(
     // if (response.statusCode === 200) {
     const data = JSON.parse(response.getBody("utf8"));
     // console.log("DATA", data);
-    const mplink = data.init_point;
+    const mplink = data.sandbox_init_point;
+
+    // const mplink = "#";
     // console.log(data.sandbox_init_point);
     // const mplink = data.sandbox_init_point;
 
     /** --------------- */
-    return { ...booking, message: "Payment required", paymentUid: payment?.uid, mercadopagoLink: mplink };
+    return {
+      ...booking,
+      message: "Payment required",
+      paymentUid: payment?.uid,
+      mercadopagoLink: mplink,
+      // eventType,
+      // payment,
+    };
   }
 
   log.debug(`Booking ${organizerUser.username} completed`);
