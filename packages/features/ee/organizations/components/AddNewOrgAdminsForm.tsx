@@ -76,7 +76,7 @@ export const AddNewOrgAdminsForm = () => {
                 required
                 value={value}
                 onChange={(e) => {
-                  const emails = e.target.value.split(",").map((email) => email.trim().toLocaleLowerCase());
+                  const emails = e.target.value.split(",").map((email) => email.trim()?.toLocaleLowerCase());
 
                   return onChange(emails);
                 }}

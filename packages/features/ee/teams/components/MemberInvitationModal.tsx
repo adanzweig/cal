@@ -127,7 +127,7 @@ export default function MemberInvitationModal(props: MemberInvitationModalProps)
 
       reader.onload = (e) => {
         const contents = e?.target?.result as string;
-        const values = contents?.split(",").map((email) => email.trim().toLocaleLowerCase());
+        const values = contents?.split(",").map((email) => email.trim()?.toLocaleLowerCase());
         newMemberFormMethods.setValue("emailOrUsername", values);
       };
 
@@ -226,7 +226,7 @@ export default function MemberInvitationModal(props: MemberInvitationModalProps)
                         onChange={(e) => {
                           const emails = e.target.value
                             .split(",")
-                            .map((email) => email.trim().toLocaleLowerCase());
+                            .map((email) => email.trim()?.toLocaleLowerCase());
 
                           return onChange(emails);
                         }}

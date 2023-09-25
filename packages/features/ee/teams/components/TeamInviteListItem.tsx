@@ -70,7 +70,7 @@ export default function TeamInviteListItem(props: Props) {
       <div className="ms-3 inline-block">
         <span className="text-emphasis text-sm font-semibold">{team.name}</span>
         <span className="text-default block text-sm leading-5">
-          {t("invited_by_team", { teamName: team.name, role: t(team.role.toLocaleLowerCase()) })}
+          {t("invited_by_team", { teamName: team.name, role: t(team.role?.toLocaleLowerCase()) })}
         </span>
       </div>
     </div>

@@ -481,7 +481,7 @@ const intervalOrderKeys = ["PER_DAY", "PER_WEEK", "PER_MONTH", "PER_YEAR"] as co
 
 const INTERVAL_LIMIT_OPTIONS = intervalOrderKeys.map((key) => ({
   value: key as keyof IntervalLimit,
-  label: `Per ${key.split("_")[1].toLocaleLowerCase()}`,
+  label: `Per ${key.split("_")[1]?.toLocaleLowerCase()}`,
 }));
 
 type IntervalLimitItemProps = {

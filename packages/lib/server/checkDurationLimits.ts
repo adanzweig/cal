@@ -42,7 +42,7 @@ export async function checkDurationLimit({
 }) {
   {
     // Take PER_DAY and turn it into day and PER_WEEK into week etc.
-    const filter = key.split("_")[1].toLocaleLowerCase() as "day" | "week" | "month" | "year";
+    const filter = key.split("_")[1]?.toLocaleLowerCase() as "day" | "week" | "month" | "year";
     const startDate = dayjs(eventStartDate).startOf(filter).toDate();
     const endDate = dayjs(startDate).endOf(filter).toDate();
 
