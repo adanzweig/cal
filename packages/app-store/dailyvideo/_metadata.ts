@@ -20,7 +20,7 @@ export const metadata = {
   appData: {
     location: {
       linkType: "dynamic",
-      type: "integrations:daily",
+      type: "integrations:google:meet",
       label: "Cal Video",
     },
   },

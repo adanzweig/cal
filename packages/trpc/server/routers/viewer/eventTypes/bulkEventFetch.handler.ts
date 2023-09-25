@@ -30,7 +30,7 @@ export const bulkEventFetchHandler = async ({ ctx }: BulkEventFetchOptions) => {
     const app = getAppFromLocationValue(
       locationParsed.success && locationParsed.data?.[0]?.type
         ? locationParsed.data[0].type
-        : "integrations:daily"
+        : "integrations:google:meet"
     );
     return {
       ...eventType,

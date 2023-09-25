@@ -98,7 +98,7 @@ const createMeeting = async (credential: CredentialWithAppName, calEvent: Calend
     // Default to calVideo
     const defaultMeeting = await createMeetingWithCalVideo(calEvent);
     if (defaultMeeting) {
-      calEvent.location = "integrations:dailyvideo";
+      calEvent.location = "integrations:google:meet";
     }
 
     returnObject = { ...returnObject, createdEvent: defaultMeeting };

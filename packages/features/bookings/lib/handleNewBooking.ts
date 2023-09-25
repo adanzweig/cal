@@ -1962,7 +1962,7 @@ async function handler(
   } else if (!requiresConfirmation && !paymentAppData.price) {
     // Use EventManager to conditionally use all needed integrations.
     const createManager = await eventManager.create(evt);
-
+    console.log(paymentAppData.price, requiresConfirmation, "-----");
     // This gets overridden when creating the event - to check if notes have been hidden or not. We just reset this back
     // to the default description when we are sending the emails.
     evt.description = eventType.description;
@@ -1970,7 +1970,7 @@ async function handler(
     results = createManager.results;
     referencesToCreate = createManager.referencesToCreate;
     videoCallUrl = evt.videoCallData && evt.videoCallData.url ? evt.videoCallData.url : null;
-
+    console.log("results", results);
     if (results.length > 0 && results.every((res) => !res.success)) {
       const error = {
         errorCode: "BookingCreatingMeetingFailed",
@@ -2126,59 +2126,61 @@ async function handler(
       booking,
       bookerEmail
     );
-
+    let mplink;
     req.statusCode = 201;
-    /** GET MERCADOPAGO LINK */
-    console.log("payment", payment);
-    const payload = {
-      items: [
-        {
-          title: eventType?.title ?? "",
-          description: eventType?.description ?? "",
-          category_id: "meeting",
-          quantity: 1,
-          currency_id: "$",
-          unit_price: payment.amount / 100,
+    if (payment.amount) {
+      /** GET MERCADOPAGO LINK */
+      console.log("payment", payment);
+      const payload = {
+        items: [
+          {
+            title: eventType?.title ?? "",
+            description: eventType?.description ?? "",
+            category_id: "meeting",
+            quantity: 1,
+            currency_id: "$",
+            unit_price: payment.amount / 100,
+          },
+        ],
+        auto_return: "approved",
+        back_urls: { success: WEBSITE_URL + "/api/integrations/mercadopagopayment/paymentCallback" },
+        payer: {
+          phone: {},
+          identification: {},
+          address: {},
         },
-      ],
-      auto_return: "approved",
-      back_urls: { success: WEBSITE_URL + "/api/integrations/mercadopagopayment/paymentCallback" },
-      payer: {
-        phone: {},
-        identification: {},
-        address: {},
-      },
-      payment_methods: {
-        excluded_payment_methods: [{}],
-        excluded_payment_types: [{}],
-      },
-      shipments: {
-        free_methods: [{}],
-        receiver_address: {},
-      },
-      external_reference: payment?.uid,
-      differential_pricing: {},
-      metadata: {
-        bookingId: payment?.uid,
-      },
-    };
+        payment_methods: {
+          excluded_payment_methods: [{}],
+          excluded_payment_types: [{}],
+        },
+        shipments: {
+          free_methods: [{}],
+          receiver_address: {},
+        },
+        external_reference: payment?.uid,
+        differential_pricing: {},
+        metadata: {
+          bookingId: payment?.uid,
+        },
+      };
 
-    const options = {
-      method: "POST",
-      json: payload,
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + payment.data.access_token,
-      },
-    };
-    if (payment?.data?.access_token == undefined) {
-      return true;
+      const options = {
+        method: "POST",
+        json: payload,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + payment.data.access_token,
+        },
+      };
+      if (payment?.data?.access_token == undefined) {
+        return true;
+      }
+      const response = request("POST", "https://api.mercadopago.com/checkout/preferences", options); // Replace the URL with your actual API endpoint
+      // if (response.statusCode === 200) {
+      const data = JSON.parse(response.getBody("utf8"));
+      // console.log("DATA", data);
+      mplink = data.sandbox_init_point;
     }
-    const response = request("POST", "https://api.mercadopago.com/checkout/preferences", options); // Replace the URL with your actual API endpoint
-    // if (response.statusCode === 200) {
-    const data = JSON.parse(response.getBody("utf8"));
-    // console.log("DATA", data);
-    const mplink = data.sandbox_init_point;
 
     // const mplink = "#";
     // console.log(data.sandbox_init_point);

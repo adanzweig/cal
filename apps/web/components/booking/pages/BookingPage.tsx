@@ -271,9 +271,11 @@ const BookingPage = ({
   // });
   const mutation = useMutation(createBooking, {
     onSuccess: async (responseData) => {
-      // @tslint:disable-next-line
-      document.location = responseData?.mercadopagoLink;
-      return true;
+      if (responseData?.mercadopagoLink) {
+        // @tslint:disable-next-line
+        document.location = responseData?.mercadopagoLink;
+        return true;
+      }
       if ("paymentUid" in responseData && !!responseData.paymentUid) {
         if (true) {
           return await router.push(
@@ -313,7 +315,7 @@ const BookingPage = ({
         router,
         successRedirectUrl: eventType.successRedirectUrl,
         query,
-        bookingUid: uid,
+        bookingUid: responseData.uid,
       });
     },
   });
