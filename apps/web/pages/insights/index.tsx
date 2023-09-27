@@ -1,20 +1,6 @@
 import { getFeatureFlagMap } from "@calcom/features/flags/server/utils";
-import {
-  AverageEventDurationChart,
-  BookingKPICards,
-  BookingStatusLineChart,
-  LeastBookedTeamMembersTable,
-  MostBookedTeamMembersTable,
-  PopularEventsTable,
-} from "@calcom/features/insights/components";
-import { FiltersProvider } from "@calcom/features/insights/context/FiltersProvider";
-import { Filters } from "@calcom/features/insights/filters";
-import Shell from "@calcom/features/shell/Shell";
-import { UpgradeTip } from "@calcom/features/tips";
-import { WEBAPP_URL } from "@calcom/lib/constants";
 import { useLocale } from "@calcom/lib/hooks/useLocale";
 import { trpc } from "@calcom/trpc";
-import { Button, ButtonGroup } from "@calcom/ui";
 import { RefreshCcw, UserPlus, Users } from "@calcom/ui/components/icon";
 
 import PageWrapper from "@components/PageWrapper";
@@ -56,7 +42,7 @@ export default function InsightsPage() {
 
   return (
     <div>
-      <Shell hideHeadingOnMobile>
+      {/* <Shell hideHeadingOnMobile>
         <UpgradeTip
           title={t("make_informed_decisions")}
           description={t("make_informed_decisions_description")}
@@ -111,7 +97,7 @@ export default function InsightsPage() {
             </FiltersProvider>
           )}
         </UpgradeTip>
-      </Shell>
+      </Shell> */}
     </div>
   );
 }

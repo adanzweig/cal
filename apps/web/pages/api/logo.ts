@@ -167,6 +167,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   // Resolve all icon types to team logos, falling back to Cal.com defaults.
   const type: LogoType = parsedQuery?.type && isValidLogoType(parsedQuery.type) ? parsedQuery.type : "logo";
   const logoDefinition = logoDefinitions[type];
+
   const filteredLogo = teamLogos[logoDefinition.source] ?? logoDefinition.fallback;
 
   try {
@@ -177,6 +178,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     // If we need to resize the team logos (via Next.js' built-in image processing)
     if (teamLogos[logoDefinition.source] && logoDefinition.w) {
       const { detectContentType, optimizeImage } = await import("next/dist/server/image-optimizer");
+      console.log(buffer);
       buffer = await optimizeImage({
         buffer,
         contentType: detectContentType(buffer) ?? "image/jpeg",

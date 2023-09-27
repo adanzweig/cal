@@ -363,7 +363,10 @@ export async function apiLogin(
     .context()
     .request.get("/api/auth/csrf")
     .then((response) => response.json())
-    .then((json) => json.csrfToken);
+    .then((json) => {
+      console.log("RET", json.csrfToken);
+      return json.csrfToken ?? null;
+    });
   const data = {
     email: user.email ?? `${user.username}@example.com`,
     password: user.password ?? user.username!,
