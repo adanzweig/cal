@@ -19,15 +19,12 @@ import { Badge, Button, ErrorBoundary, Skeleton, useMeta, VerticalTabItem } from
 import {
   User,
   Key,
-  CreditCard,
-  Terminal,
   Users,
   Loader,
   Lock,
   ArrowLeft,
   ChevronDown,
   ChevronRight,
-  Plus,
   Menu,
   Building,
 } from "@calcom/ui/components/icon";
@@ -53,28 +50,28 @@ const tabs: VerticalTabItemProps[] = [
     icon: Key,
     children: [
       { name: "password", href: "/settings/security/password" },
-      { name: "impersonation", href: "/settings/security/impersonation" },
+      // { name: "impersonation", href: "/settings/security/impersonation" },
       { name: "2fa_auth", href: "/settings/security/two-factor-auth" },
     ],
   },
-  {
-    name: "billing",
-    href: "/settings/billing",
-    icon: CreditCard,
-    children: [{ name: "manage_billing", href: "/settings/billing" }],
-  },
-  {
-    name: "developer",
-    href: "/settings/developer",
-    icon: Terminal,
-    children: [
-      //
-      { name: "webhooks", href: "/settings/developer/webhooks" },
-      { name: "api_keys", href: "/settings/developer/api-keys" },
-      // TODO: Add profile level for embeds
-      // { name: "embeds", href: "/v2/settings/developer/embeds" },
-    ],
-  },
+  // {
+  //   name: "billing",
+  //   href: "/settings/billing",
+  //   icon: CreditCard,
+  //   children: [{ name: "manage_billing", href: "/settings/billing" }],
+  // },
+  // {
+  //   name: "developer",
+  //   href: "/settings/developer",
+  //   icon: Terminal,
+  //   children: [
+  //     //
+  //     { name: "webhooks", href: "/settings/developer/webhooks" },
+  //     { name: "api_keys", href: "/settings/developer/api-keys" },
+  //     // TODO: Add profile level for embeds
+  //     // { name: "embeds", href: "/v2/settings/developer/embeds" },
+  //   ],
+  // },
   {
     name: "organization",
     href: "/settings/organizations",
@@ -373,14 +370,15 @@ const SettingsSidebarContainer = ({
                                       textClassNames="px-3 text-emphasis font-medium text-sm"
                                       disableChevron
                                     />
-                                    {HOSTED_CAL_FEATURES && (
-                                      <VerticalTabItem
-                                        name={t("saml_config")}
-                                        href={`/settings/teams/${team.id}/sso`}
-                                        textClassNames="px-3 text-emphasis font-medium text-sm"
-                                        disableChevron
-                                      />
-                                    )}
+                                    {
+                                      HOSTED_CAL_FEATURES && null
+                                      // <VerticalTabItem
+                                      //   name={t("saml_config")}
+                                      //   href={`/settings/teams/${team.id}/sso`}
+                                      //   textClassNames="px-3 text-emphasis font-medium text-sm"
+                                      //   disableChevron
+                                      // />
+                                    }
                                   </>
                                 ) : null}
                               </>
@@ -389,15 +387,16 @@ const SettingsSidebarContainer = ({
                         </Collapsible>
                       );
                   })}
-                {(!currentOrg || (currentOrg && currentOrg?.user?.role !== "MEMBER")) && (
-                  <VerticalTabItem
-                    name={t("add_a_team")}
-                    href={`${WEBAPP_URL}/settings/teams/new`}
-                    textClassNames="px-3 items-center mt-2 text-emphasis font-medium text-sm"
-                    icon={Plus}
-                    disableChevron
-                  />
-                )}
+                {
+                  (!currentOrg || (currentOrg && currentOrg?.user?.role !== "MEMBER")) && null
+                  // <VerticalTabItem
+                  //   name={t("add_a_team")}
+                  //   href={`${WEBAPP_URL}/settings/teams/new`}
+                  //   textClassNames="px-3 items-center mt-2 text-emphasis font-medium text-sm"
+                  //   icon={Plus}
+                  //   disableChevron
+                  // />
+                }
               </div>
             </React.Fragment>
           );

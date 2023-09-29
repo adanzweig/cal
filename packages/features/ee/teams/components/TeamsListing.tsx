@@ -5,7 +5,7 @@ import { WEBAPP_URL, APP_NAME } from "@calcom/lib/constants";
 import { useLocale } from "@calcom/lib/hooks/useLocale";
 import { trpc } from "@calcom/trpc/react";
 import { Alert, Button, ButtonGroup, Label, showToast } from "@calcom/ui";
-import { EyeOff, Mail, RefreshCcw, UserPlus, Users, Video } from "@calcom/ui/components/icon";
+import { EyeOff, Mail, Plus, RefreshCcw, UserPlus, Users, Video } from "@calcom/ui/components/icon";
 
 import { UpgradeTip } from "../../../tips";
 import SkeletonLoaderTeamList from "./SkeletonloaderTeamList";
@@ -18,6 +18,7 @@ export function TeamsListing() {
 
   const [inviteTokenChecked, setInviteTokenChecked] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [isAdmin, setIsAdmin] = useState(false);
 
   const { data, isLoading } = trpc.viewer.teams.list.useQuery(undefined, {
     enabled: inviteTokenChecked,
@@ -41,7 +42,16 @@ export function TeamsListing() {
 
   const teams = useMemo(() => data?.filter((m) => m.accepted) || [], [data]);
   const invites = useMemo(() => data?.filter((m) => !m.accepted) || [], [data]);
-
+  const admin = useMemo(() => {
+    console.log(data);
+    if (data) {
+      if (data[0].role != "OWNER") {
+        setIsAdmin(false);
+      } else {
+        setIsAdmin(true);
+      }
+    }
+  }, [data]);
   const features = [
     {
       icon: <Users className="h-5 w-5 text-red-500" />,
@@ -88,7 +98,15 @@ export function TeamsListing() {
   return (
     <>
       {!!errorMessage && <Alert severity="error" title={errorMessage} />}
-
+      {isAdmin && (
+        <Button
+          variant="fab"
+          StartIcon={Plus}
+          type="button"
+          href={`${WEBAPP_URL}/settings/teams/new?returnTo=${WEBAPP_URL}/teams`}>
+          {t("new")}
+        </Button>
+      )}
       {invites.length > 0 && (
         <div className="bg-subtle mb-6 rounded-md p-5">
           <Label className=" text-emphasis pb-2 font-semibold">{t("pending_invites")}</Label>

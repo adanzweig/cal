@@ -22,7 +22,7 @@ import TimezoneChangeDialog from "@calcom/features/settings/TimezoneChangeDialog
 import AdminPasswordBanner from "@calcom/features/users/components/AdminPasswordBanner";
 import VerifyEmailBanner from "@calcom/features/users/components/VerifyEmailBanner";
 import classNames from "@calcom/lib/classNames";
-import { APP_NAME, DESKTOP_APP_LINK, JOIN_DISCORD, ROADMAP, WEBAPP_URL } from "@calcom/lib/constants";
+import { APP_NAME, WEBAPP_URL } from "@calcom/lib/constants";
 import { getPlaceholderAvatar } from "@calcom/lib/defaultAvatarImage";
 import getBrandColours from "@calcom/lib/getBrandColours";
 import { useIsomorphicLayoutEffect } from "@calcom/lib/hooks/useIsomorphicLayoutEffect";
@@ -58,25 +58,19 @@ import {
 import {
   ArrowLeft,
   ArrowRight,
-  BarChart,
   Calendar,
   Clock,
-  Download,
   ExternalLink,
   FileText,
   Grid,
-  HelpCircle,
   Link as LinkIcon,
   LogOut,
-  Map,
   Moon,
   MoreHorizontal,
   ChevronDown,
   Copy,
   Settings,
-  Slack,
   Users,
-  Zap,
   User as UserIcon,
 } from "@calcom/ui/components/icon";
 
@@ -423,7 +417,7 @@ function UserDropdown({ small }: UserDropdownProps) {
                   </DropdownItem>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>
+                {/* <DropdownMenuItem>
                   <DropdownItem
                     StartIcon={(props) => <Slack strokeWidth={1.5} {...props} />}
                     target="_blank"
@@ -431,27 +425,27 @@ function UserDropdown({ small }: UserDropdownProps) {
                     href={JOIN_DISCORD}>
                     {t("join_our_discord")}
                   </DropdownItem>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
+                </DropdownMenuItem> */}
+                {/* <DropdownMenuItem>
                   <DropdownItem StartIcon={Map} target="_blank" href={ROADMAP}>
                     {t("visit_roadmap")}
                   </DropdownItem>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
+                </DropdownMenuItem> */}
+                {/* <DropdownMenuItem>
                   <DropdownItem
                     type="button"
                     StartIcon={(props) => <HelpCircle aria-hidden="true" {...props} />}
                     onClick={() => setHelpOpen(true)}>
                     {t("help")}
                   </DropdownItem>
-                </DropdownMenuItem>
-                <DropdownMenuItem className="desktop-hidden hidden lg:flex">
+                </DropdownMenuItem> */}
+                {/* <DropdownMenuItem className="desktop-hidden hidden lg:flex">
                   <DropdownItem StartIcon={Download} target="_blank" rel="noreferrer" href={DESKTOP_APP_LINK}>
                     {t("download_desktop_app")}
                   </DropdownItem>
-                </DropdownMenuItem>
+                </DropdownMenuItem> */}
 
-                <DropdownMenuSeparator />
+                {/* <DropdownMenuSeparator /> */}
 
                 <DropdownMenuItem>
                   <DropdownItem
@@ -571,17 +565,17 @@ const navigation: NavigationItemType[] = [
       return router.asPath.startsWith("/apps/routing-forms/");
     },
   },
-  {
-    name: "workflows",
-    href: "/workflows",
-    icon: Zap,
-  },
-  {
-    name: "insights",
-    href: "/insights",
-    icon: BarChart,
-  },
 ];
+// {
+//   name: "workflows",
+//   href: "/workflows",
+//   icon: Zap,
+// },
+// {
+//   name: "insights",
+//   href: "/insights",
+//   icon: BarChart,
+// },
 
 const moreSeparatorIndex = navigation.findIndex((item) => item.name === MORE_SEPARATOR_NAME);
 // We create all needed navigation items for the different use cases
