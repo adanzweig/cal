@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { getSuccessPageLocationMessage } from "@calcom/app-store/locations";
 import dayjs from "@calcom/dayjs";
 import { sdkActionManager, useIsEmbed } from "@calcom/embed-core/embed-iframe";
-import { APP_NAME, WEBSITE_URL } from "@calcom/lib/constants";
+import { APP_NAME } from "@calcom/lib/constants";
 import getPaymentAppData from "@calcom/lib/getPaymentAppData";
 import { useLocale } from "@calcom/lib/hooks/useLocale";
 import useTheme from "@calcom/lib/hooks/useTheme";
@@ -134,9 +134,9 @@ const PaymentPage: FC<PaymentPageProps> = (props) => {
                 </div>
                 {!props.profile.hideBranding && (
                   <div className="text-muted dark:text-inverted mt-4 border-t pt-4 text-center text-xs dark:border-gray-900">
-                    <a href={`${WEBSITE_URL}/signup`}>
+                    {/* <a href={`${WEBSITE_URL}/signup`}>
                       {t("create_booking_link_with_calcom", { appName: APP_NAME })}
-                    </a>
+                    </a> */}
                   </div>
                 )}
               </div>

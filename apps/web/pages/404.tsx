@@ -58,17 +58,18 @@ export default function Custom404() {
         // Accessing a non-existent team
         setUsername(splitPath[2]);
         setCurrentPageType(pageType.TEAM);
-        setUrl(`${WEBSITE_URL}/signup?callbackUrl=settings/teams/new%3Fslug%3D${username.replace("/", "")}`);
+        setUrl("#");
+        // setUrl(`${WEBSITE_URL}/signup?callbackUrl=settings/teams/new%3Fslug%3D${username.replace("/", "")}`);
       } else {
         setUsername(routerUsername);
-        setUrl(`${WEBSITE_URL}/signup?username=${username.replace("/", "")}`);
+        setUrl("#");
+        // setUrl(`${WEBSITE_URL}/signup?username=${username.replace("/", "")}`);
       }
     } else {
       setUsername(currentOrgDomain);
       setCurrentPageType(pageType.ORG);
-      setUrl(
-        `${WEBSITE_URL}/signup?callbackUrl=settings/organizations/new%3Fslug%3D${username.replace("/", "")}`
-      );
+      setUrl("#");
+      // `${WEBSITE_URL}/signup?callbackUrl=settings/organizations/new%3Fslug%3D${username.replace("/", "")}`
     }
   }, []);
 

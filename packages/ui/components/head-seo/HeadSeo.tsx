@@ -79,11 +79,9 @@ export const HeadSeo = (props: HeadSeoProps): JSX.Element => {
     url && (new URL(url).hostname.endsWith("cal.com") || new URL(url).hostname.endsWith("cal.dev"));
   // Get the router's path
   const path = useRouter().asPath;
-  const selfHostedOrigin = WEBSITE_URL || "https://cal.com";
+  const selfHostedOrigin = WEBSITE_URL;
   // Set the default URL to either the current URL (if self-hosted) or https://cal.com canonical URL
-  const defaultUrl = isCalcom
-    ? buildCanonical({ path, origin: "https://cal.com" })
-    : buildCanonical({ path, origin: selfHostedOrigin });
+  const defaultUrl = buildCanonical({ path, origin: selfHostedOrigin });
 
   const {
     title,
