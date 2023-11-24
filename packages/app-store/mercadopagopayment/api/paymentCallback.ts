@@ -32,8 +32,12 @@ async function getHandler(req: NextApiRequest, res: NextApiResponse) {
   // callbackUrl.searchParams.set("paymentStatus", checkoutSession.payment_status);
   // return res.redirect(callbackUrl.toString()).end();
   console.log(req.query);
-
-  const token = "TEST-5737221503886728-071913-f2330056bbce445f4f2ee81c21815576-92582695"; // Replace this with your actual Bearer token
+  const payment = await prisma.payment.findFirst({
+    where: {
+      uid: req.query.external_reference,
+    },
+  });
+  const token = payment.data.access_token; // Replace this with your actual Bearer token
   const headers = {
     Authorization: `Bearer ${token}`,
     "Content-Type": "application/json", // Optional, set any additional headers if required
@@ -60,7 +64,7 @@ async function getHandler(req: NextApiRequest, res: NextApiResponse) {
       externalId: req.query.payment_id,
     },
   });
-  console.log(updatedPayment,'pagoUpdt');
+  console.log(updatedPayment, "pagoUpdt");
   const booking = await prisma.booking.findFirst({
     where: {
       id: updatedPayment.bookingId,
