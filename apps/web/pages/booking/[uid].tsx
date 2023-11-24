@@ -48,9 +48,8 @@ import type { Prisma } from "@calcom/prisma/client";
 import { BookingStatus } from "@calcom/prisma/enums";
 import { bookingMetadataSchema } from "@calcom/prisma/zod-utils";
 import { customInputSchema, EventTypeMetaDataSchema } from "@calcom/prisma/zod-utils";
-import { HeadSeo, Badge, useCalcomTheme, Alert } from "@calcom/ui";
+import { HeadSeo, Badge, useCalcomTheme } from "@calcom/ui";
 import { X, ExternalLink, ChevronLeft, Check, Calendar } from "@calcom/ui/components/icon";
-import { AlertCircle } from "@calcom/ui/components/icon";
 
 import { timeZone } from "@lib/clock";
 import type { inferSSRProps } from "@lib/types/inferSSRProps";
@@ -709,7 +708,7 @@ export default function Success(props: SuccessProps) {
                   </>
                 )} */}
               </div>
-              {isGmail && (
+              {/* {isGmail && (
                 <Alert
                   className="main -mb-20 mt-4 inline-block text-left sm:-mt-4 sm:mb-4 sm:w-full sm:max-w-xl sm:align-middle"
                   severity="warning"
@@ -728,7 +727,7 @@ export default function Success(props: SuccessProps) {
                   CustomIcon={AlertCircle}
                   customIconColor="text-attention dark:text-orange-200"
                 />
-              )}
+              )} */}
             </div>
           </div>
         </div>
