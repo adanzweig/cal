@@ -708,26 +708,6 @@ export default function Success(props: SuccessProps) {
                   </>
                 )} */}
               </div>
-              {/* {isGmail && (
-                <Alert
-                  className="main -mb-20 mt-4 inline-block text-left sm:-mt-4 sm:mb-4 sm:w-full sm:max-w-xl sm:align-middle"
-                  severity="warning"
-                  message={
-                    <div>
-                      <p className="font-semibold">{t("google_new_spam_policy")}</p>
-                      <span className="underline">
-                        <a
-                          target="_blank"
-                          href="https://cal.com/blog/google-s-new-spam-policy-may-be-affecting-your-invitations">
-                          {t("resolve")}
-                        </a>
-                      </span>
-                    </div>
-                  }
-                  CustomIcon={AlertCircle}
-                  customIconColor="text-attention dark:text-orange-200"
-                />
-              )} */}
             </div>
           </div>
         </div>
