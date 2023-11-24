@@ -1959,10 +1959,9 @@ async function handler(
     }
     // If it's not a reschedule, doesn't require confirmation and there's no price,
     // Create a booking
-  } else if (!requiresConfirmation && !paymentAppData.price) {
+  } else if (!requiresConfirmation) {
     // Use EventManager to conditionally use all needed integrations.
     const createManager = await eventManager.create(evt);
-    console.log(paymentAppData.price, requiresConfirmation, "-----");
     // This gets overridden when creating the event - to check if notes have been hidden or not. We just reset this back
     // to the default description when we are sending the emails.
     evt.description = eventType.description;
@@ -2060,18 +2059,19 @@ async function handler(
             isAttendeeConfirmationEmailDisabled = allowDisablingAttendeeConfirmationEmails(workflows);
           }
         }
-
-        await sendScheduledEmails(
-          {
-            ...evt,
-            additionalInformation: metadata,
-            additionalNotes,
-            customInputs,
-          },
-          eventNameObject,
-          isHostConfirmationEmailsDisabled,
-          isAttendeeConfirmationEmailDisabled
-        );
+        if (!paymentAppData.price) {
+          await sendScheduledEmails(
+            {
+              ...evt,
+              additionalInformation: metadata,
+              additionalNotes,
+              customInputs,
+            },
+            eventNameObject,
+            isHostConfirmationEmailsDisabled,
+            isAttendeeConfirmationEmailDisabled
+          );
+        }
       }
     }
   }
@@ -2085,116 +2085,6 @@ async function handler(
   if (!isConfirmedByDefault && noEmail !== true && !bookingRequiresPayment) {
     await sendOrganizerRequestEmail({ ...evt, additionalNotes });
     await sendAttendeeRequestEmail({ ...evt, additionalNotes }, attendeesList[0]);
-  }
-
-  if (bookingRequiresPayment) {
-    // Load credentials.app.categories
-    const credentialPaymentAppCategories = await prisma.credential.findMany({
-      where: {
-        userId: organizerUser.id,
-        app: {
-          categories: {
-            hasSome: ["payment"],
-          },
-        },
-      },
-      select: {
-        key: true,
-        appId: true,
-        app: {
-          select: {
-            categories: true,
-            dirName: true,
-          },
-        },
-      },
-    });
-    const eventTypePaymentAppCredential = credentialPaymentAppCategories.find((credential) => {
-      return credential.appId === paymentAppData.appId;
-    });
-
-    if (!eventTypePaymentAppCredential) {
-      throw new HttpError({ statusCode: 400, message: "Missing payment credentials" });
-    }
-
-    // Convert type of eventTypePaymentAppCredential to appId: EventTypeAppList
-    if (!booking.user) booking.user = organizerUser;
-    const payment = await handlePayment(
-      evt,
-      eventType,
-      eventTypePaymentAppCredential as IEventTypePaymentCredentialType,
-      booking,
-      bookerEmail
-    );
-    let mplink;
-    req.statusCode = 201;
-    if (payment.amount) {
-      /** GET MERCADOPAGO LINK */
-      console.log("payment", payment);
-      const payload = {
-        items: [
-          {
-            title: eventType?.title ?? "",
-            description: eventType?.description ?? "",
-            category_id: "meeting",
-            quantity: 1,
-            currency_id: "$",
-            unit_price: payment.amount / 100,
-          },
-        ],
-        auto_return: "approved",
-        back_urls: { success: WEBSITE_URL + "/api/integrations/mercadopagopayment/paymentCallback" },
-        payer: {
-          phone: {},
-          identification: {},
-          address: {},
-        },
-        payment_methods: {
-          excluded_payment_methods: [{}],
-          excluded_payment_types: [{}],
-        },
-        shipments: {
-          free_methods: [{}],
-          receiver_address: {},
-        },
-        external_reference: payment?.uid,
-        differential_pricing: {},
-        metadata: {
-          bookingId: payment?.uid,
-        },
-      };
-
-      const options = {
-        method: "POST",
-        json: payload,
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + payment.data.access_token,
-        },
-      };
-      if (payment?.data?.access_token == undefined) {
-        return true;
-      }
-      const response = request("POST", "https://api.mercadopago.com/checkout/preferences", options); // Replace the URL with your actual API endpoint
-      // if (response.statusCode === 200) {
-      const data = JSON.parse(response.getBody("utf8"));
-      // console.log("DATA", data);
-      mplink = data.init_point;
-    }
-
-    // const mplink = "#";
-    // console.log(data.sandbox_init_point);
-    // const mplink = data.sandbox_init_point;
-
-    /** --------------- */
-    return {
-      ...booking,
-      message: "Payment required",
-      paymentUid: payment?.uid,
-      mercadopagoLink: mplink,
-      // eventType,
-      // payment,
-    };
   }
 
   log.debug(`Booking ${organizerUser.username} completed`);
@@ -2340,6 +2230,115 @@ async function handler(
   // booking.mercadopagoLink = "123456";
   // booking successful
   req.statusCode = 201;
+  if (bookingRequiresPayment) {
+    // Load credentials.app.categories
+    const credentialPaymentAppCategories = await prisma.credential.findMany({
+      where: {
+        userId: organizerUser.id,
+        app: {
+          categories: {
+            hasSome: ["payment"],
+          },
+        },
+      },
+      select: {
+        key: true,
+        appId: true,
+        app: {
+          select: {
+            categories: true,
+            dirName: true,
+          },
+        },
+      },
+    });
+    const eventTypePaymentAppCredential = credentialPaymentAppCategories.find((credential) => {
+      return credential.appId === paymentAppData.appId;
+    });
+
+    if (!eventTypePaymentAppCredential) {
+      throw new HttpError({ statusCode: 400, message: "Missing payment credentials" });
+    }
+
+    // Convert type of eventTypePaymentAppCredential to appId: EventTypeAppList
+    if (!booking.user) booking.user = organizerUser;
+    const payment = await handlePayment(
+      evt,
+      eventType,
+      eventTypePaymentAppCredential as IEventTypePaymentCredentialType,
+      booking,
+      bookerEmail
+    );
+    let mplink;
+    req.statusCode = 201;
+    if (payment.amount) {
+      /** GET MERCADOPAGO LINK */
+      console.log("payment", payment);
+      const payload = {
+        items: [
+          {
+            title: eventType?.title ?? "",
+            description: eventType?.description ?? "",
+            category_id: "meeting",
+            quantity: 1,
+            currency_id: "$",
+            unit_price: payment.amount / 100,
+          },
+        ],
+        auto_return: "approved",
+        back_urls: { success: WEBSITE_URL + "/api/integrations/mercadopagopayment/paymentCallback" },
+        payer: {
+          phone: {},
+          identification: {},
+          address: {},
+        },
+        payment_methods: {
+          excluded_payment_methods: [{}],
+          excluded_payment_types: [{}],
+        },
+        shipments: {
+          free_methods: [{}],
+          receiver_address: {},
+        },
+        external_reference: payment?.uid,
+        differential_pricing: {},
+        metadata: {
+          bookingId: payment?.uid,
+        },
+      };
+
+      const options = {
+        method: "POST",
+        json: payload,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + payment.data.access_token,
+        },
+      };
+      if (payment?.data?.access_token == undefined) {
+        return true;
+      }
+      const response = request("POST", "https://api.mercadopago.com/checkout/preferences", options); // Replace the URL with your actual API endpoint
+      // if (response.statusCode === 200) {
+      const data = JSON.parse(response.getBody("utf8"));
+      // console.log("DATA", data);
+      mplink = data.init_point;
+    }
+
+    // const mplink = "#";
+    // console.log(data.sandbox_init_point);
+    // const mplink = data.sandbox_init_point;
+
+    /** --------------- */
+    return {
+      ...booking,
+      message: "Payment required",
+      paymentUid: payment?.uid,
+      mercadopagoLink: mplink,
+      // eventType,
+      // payment,
+    };
+  }
   return {
     ...booking,
     seatReferenceUid: evt.attendeeSeatId,

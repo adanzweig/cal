@@ -3,14 +3,12 @@ import type Stripe from "stripe";
 import { v4 as uuidv4 } from "uuid";
 import z from "zod";
 
-import { sendAwaitingPaymentEmail } from "@calcom/emails";
 import { getErrorFromUnknown } from "@calcom/lib/errors";
 import prisma from "@calcom/prisma";
 import type { CalendarEvent } from "@calcom/types/Calendar";
 import type { IAbstractPaymentService } from "@calcom/types/PaymentService";
 
 import { paymentOptionEnum } from "../zod";
-import { createPaymentLink } from "./client";
 import { retrieveOrCreateStripeCustomerByEmail } from "./customer";
 import type { StripeSetupIntentData, StripePaymentData } from "./server";
 
@@ -319,22 +317,22 @@ export class PaymentService implements IAbstractPaymentService {
     paymentData: Payment
   ): Promise<void> {
     const e = event;
-    await sendAwaitingPaymentEmail({
-      ...event,
-      paymentInfo: {
-        link: createPaymentLink({
-          paymentUid: paymentData.uid,
-          name: booking.user?.name,
-          email: booking.user?.email,
-          date: booking.startTime.toISOString(),
-          event: e,
-          paymentData: paymentData,
-        }),
-        paymentOption: paymentData.paymentOption || "ON_BOOKING",
-        amount: paymentData.amount,
-        currency: paymentData.currency,
-      },
-    });
+    // await sendAwaitingPaymentEmail({
+    //   ...event,
+    //   paymentInfo: {
+    //     link: createPaymentLink({
+    //       paymentUid: paymentData.uid,
+    //       name: booking.user?.name,
+    //       email: booking.user?.email,
+    //       date: booking.startTime.toISOString(),
+    //       event: e,
+    //       paymentData: paymentData,
+    //     }),
+    //     paymentOption: paymentData.paymentOption || "ON_BOOKING",
+    //     amount: paymentData.amount,
+    //     currency: paymentData.currency,
+    //   },
+    // });
   }
 
   async deletePayment(paymentId: Payment["id"]): Promise<boolean> {
