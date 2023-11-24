@@ -2179,7 +2179,7 @@ async function handler(
       // if (response.statusCode === 200) {
       const data = JSON.parse(response.getBody("utf8"));
       // console.log("DATA", data);
-      mplink = data.sandbox_init_point;
+      mplink = data.init_point;
     }
 
     // const mplink = "#";
